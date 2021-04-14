@@ -81,6 +81,7 @@ public class PixelSkills {
                 .child(AdminCommand.getAdminCommands(), "admin")
                 .child(PlayerCommands.getInfoSpec(), "info")
                 .child(PlayerCommands.getMsgToggle(), "toggle")
+                .child(PlayerCommands.getCheckLevel(), "lvl")
                 .executor((sender, context) -> {
 
                     // Let's do an experiment

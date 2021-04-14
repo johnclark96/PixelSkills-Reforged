@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.TaskGetters;
+import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import com.pixelmonmod.pixelmon.comm.packetHandlers.npc.SetNPCData;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCChatting;
@@ -273,6 +274,26 @@ public class PlayerCommands {
                     }
 
 
+
+                    return CommandResult.success();
+
+                })
+                .build();
+
+    }
+
+    public static CommandSpec getCheckLevel() {
+
+        return CommandSpec.builder()
+                .arguments(
+                        GenericArguments.string(Text.of("skill"))
+                )
+                .executor((sender, context) -> {
+
+                    Player player = (Player) sender;
+                    String skill = AdminCommand.getPrettySkillName(context.getOne("skill").get().toString());
+                    int lvl = AccountsHandler.getLevel(skill, player);
+                    player.sendMessage(Text.of(TextColors.AQUA, "Your current level in ", TextColors.YELLOW, skill, TextColors.AQUA, " is ", TextColors.YELLOW, String.valueOf(lvl)));
 
                     return CommandResult.success();
 
