@@ -13,6 +13,12 @@ public class Looter {
 
     @SubscribeEvent
     public void onPokeLootOpen (PokeLootClaimedEvent event) throws IOException, ObjectMappingException {
+
+        if (event.isCanceled()) {
+
+            return;
+
+        }
         
         if (GeneralGetters.isSkillEnabled(12)) {
             

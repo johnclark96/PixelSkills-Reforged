@@ -53,6 +53,12 @@ public class Harvester {
 
                                     if (GeneralGetters.getSkillPerm(0).equals("none") || player.hasPermission(GeneralGetters.getSkillPerm(0))) {
 
+                                        if (event.isCancelled()) {
+
+                                            return;
+
+                                        }
+
                                         try {
 
                                             ExperienceHandler.didTask(0, "Mining-Fossils", player);
@@ -104,6 +110,12 @@ public class Harvester {
 
                                                 }
 
+                                                if (event.isCancelled()) {
+
+                                                    return;
+
+                                                }
+
                                                 ExperienceHandler.didHarvesterTask(player, "Chopping-Wood", base);
 
                                             }
@@ -137,6 +149,12 @@ public class Harvester {
                                                 } else {
 
                                                     base = EXPGetters.getEXPFromTask(11, "Mining-Blocks", player);
+
+                                                }
+
+                                                if (event.isCancelled()) {
+
+                                                    return;
 
                                                 }
 

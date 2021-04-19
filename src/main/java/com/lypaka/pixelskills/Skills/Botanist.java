@@ -18,6 +18,12 @@ public class Botanist {
 
     @SubscribeEvent
     public void onApricornPick (ApricornEvent.PickApricorn event) throws IOException, ObjectMappingException {
+
+        if (event.isCanceled()) {
+
+            return;
+
+        }
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -41,6 +47,12 @@ public class Botanist {
 
     @SubscribeEvent
     public void onApricornPlant (ApricornEvent.ApricornPlanted event) throws IOException, ObjectMappingException {
+
+        if (event.isCanceled()) {
+
+            return;
+
+        }
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -64,6 +76,12 @@ public class Botanist {
 
     @SubscribeEvent
     public void onBerryPick (BerryEvent.PickBerry event) throws IOException, ObjectMappingException {
+
+        if (event.isCanceled()) {
+
+            return;
+
+        }
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -87,6 +105,12 @@ public class Botanist {
 
     @SubscribeEvent
     public void onBerryPlant (BerryEvent.BerryPlanted event) throws IOException, ObjectMappingException {
+
+        if (event.isCanceled()) {
+
+            return;
+
+        }
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -110,6 +134,12 @@ public class Botanist {
 
     @SubscribeEvent
     public void onApricornWater (ApricornEvent.ApricornWatered event) throws IOException, ObjectMappingException {
+
+        if (event.isCanceled()) {
+
+            return;
+
+        }
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -120,7 +150,7 @@ public class Botanist {
                 if (GeneralGetters.getSkillPerm(3).equals("none") || player.hasPermission(GeneralGetters.getSkillPerm(3))) {
 
                     setPlant(event.tree);
-                    ExperienceHandler.didTask(3, "Water-Apricorns", player);
+                    ExperienceHandler.didTask(3, "Watering-Apricorns", player);
 
                 }
                 
