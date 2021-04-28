@@ -15,6 +15,13 @@ public class ConfigSetters {
 
         List<String> list = new ArrayList<>();
 
+        if (ConfigManager.getConfigNode(folder, 0, "Messages", "Enable").isVirtual()) {
+
+            ConfigManager.getConfigNode(folder, 0, "Messages", "Enable", "EXP").setValue(true);
+            ConfigManager.getConfigNode(folder, 0, "Messages", "Enable", "Level-Up").setValue(true);
+
+        }
+
         if (ConfigManager.getConfigNode(folder, 5, "Node-Generated").isVirtual()) {
 
             ConfigManager.getConfigNode(folder, 5, "Skill-Description").setValue(list);

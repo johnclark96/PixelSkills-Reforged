@@ -49,6 +49,7 @@ public class PixelSkills {
 
     public static PixelSkills INSTANCE;
     private static final Random random = new Random();
+    public static boolean isPixelBoostersLoaded = false;
 
     @Listener
     public void onPreInit (GamePreInitializationEvent event) throws IOException {
@@ -65,6 +66,13 @@ public class PixelSkills {
 
         // Loads the plugin's commands
         registerCommands();
+
+        if (Sponge.getPluginManager().getPlugin("pixelboosters").isPresent()) {
+
+            isPixelBoostersLoaded = true;
+            logger.info("Detected PixelBoosters, integrating...");
+
+        }
     }
 
 

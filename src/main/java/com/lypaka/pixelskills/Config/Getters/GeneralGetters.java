@@ -4,6 +4,13 @@ import com.lypaka.pixelskills.Config.ConfigManager;
 
 public class GeneralGetters {
 
+    public static boolean areMessagesEnabled (String skill, String type) {
+
+        int folder = getConfigFromSkill(skill);
+        return ConfigManager.getConfigNode(folder, 0, "Messages", "Enable", type).getBoolean();
+
+    }
+
     public static void setSkillStatus (String skill, boolean status) {
 
         int folder = getConfigFromSkill(skill);

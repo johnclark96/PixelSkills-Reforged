@@ -292,6 +292,37 @@ public class AdminCommand {
                 })
                 .build();
 
+        CommandSpec msgToggle = CommandSpec.builder()
+                .arguments(
+                        GenericArguments.string(Text.of("skill")),
+                        GenericArguments.string(Text.of("type")),
+                        GenericArguments.bool(Text.of("value"))
+                )
+                .executor((sender, context) -> {
+
+                    String skill = getPrettySkillName(context.getOne("skill").get().toString());
+                    String type = context.getOne("type").get().toString();
+                    boolean value = Boolean.parseBoolean(context.getOne("value").get().toString());
+                    int folder = GeneralGetters.getConfigFromSkill(skill);
+
+                    if (type.equalsIgnoreCase("exp")) {
+
+                        ConfigManager.getConfigNode(folder, 0, "Messages", "Enable", "EXP").setValue(value);
+
+                    } else {
+
+                        ConfigManager.getConfigNode(folder, 0, "Messages", "Enable", "Level-Up").setValue(value);
+
+                    }
+
+                    ConfigManager.saveSkill(folder, 0);
+                    sender.sendMessage(Text.of(TextColors.GREEN, "Successfully toggled the " + type + " messages for the " + skill + " skill!"));
+
+                    return CommandResult.success();
+
+                })
+                .build();
+
         return CommandSpec.builder()
                 .child(checkLevel, "checklevel", "checklvl")
                 .child(levelUp, "lvlup", "levelup")
@@ -303,6 +334,7 @@ public class AdminCommand {
                 .child(reset, "reset")
                 .child(reload, "reload")
                 .child(toggle, "toggle")
+                .child(msgToggle, "msgtoggle")
                 .permission("pixelskills.command.admin")
                 .executor((sender, context) -> {return CommandResult.success();}).build();
 
@@ -310,7 +342,7 @@ public class AdminCommand {
 
     public static String getPrettySkillName (String name) {
 
-        switch (name) {
+        switch (name.toLowerCase()) {
 
             case "archaeologist":
                 return "Archaeologist";
