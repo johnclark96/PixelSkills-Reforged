@@ -7,6 +7,7 @@ import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.GUIs.SkillInfoPage;
 import com.lypaka.pixelskills.PerkHandlers.HarvesterPerks;
 import com.lypaka.pixelskills.Skills.*;
+import com.lypaka.pixelskills.Utils.Listeners.CandyUseListener;
 import com.lypaka.pixelskills.Utils.Listeners.JoinListener;
 import com.lypaka.pixelskills.Utils.Listeners.PokemonEXPGainListener;
 import com.lypaka.pixelskills.Utils.Listeners.UseItemEventListener;
@@ -133,6 +134,8 @@ public class PixelSkills {
         Pixelmon.EVENT_BUS.register(new Looter());
         Pixelmon.EVENT_BUS.register(new Photographer());
         Pixelmon.EVENT_BUS.register(new Teacher());
+        Sponge.getEventManager().registerListeners(this, new CandyUseListener());
+        Pixelmon.EVENT_BUS.register(new CandyUseListener());
         Sponge.getEventManager().registerListeners(this, new Harvester());
         logger.info("PixelSkills finished loading the skills!");
 
