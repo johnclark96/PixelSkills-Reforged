@@ -135,7 +135,6 @@ public class PixelSkills {
         Pixelmon.EVENT_BUS.register(new Photographer());
         Pixelmon.EVENT_BUS.register(new Teacher());
         Sponge.getEventManager().registerListeners(this, new CandyUseListener());
-        Pixelmon.EVENT_BUS.register(new CandyUseListener());
         Sponge.getEventManager().registerListeners(this, new Harvester());
         logger.info("PixelSkills finished loading the skills!");
 
