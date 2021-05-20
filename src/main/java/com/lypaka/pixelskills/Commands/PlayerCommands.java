@@ -142,7 +142,7 @@ public class PlayerCommands {
                     String taskArg = context.getOne("task").get().toString();
                     String taskFixed = null;
 
-                    if (isSkill(taskArg)) {
+                    if (isSkill(AdminCommand.getPrettySkillName(skill))) {
 
                         String skillFixed = getCamelCase(skill);
                         List<String> tasks = TaskGetters.getTasks(skillFixed);

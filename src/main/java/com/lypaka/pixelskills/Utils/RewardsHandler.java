@@ -212,7 +212,7 @@ public class RewardsHandler {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getRewardMessage(folder, rewardNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)
                                 .replace("%number%", String.valueOf((int) result))
                                 .replace("%prize%", prz)
                         ));
@@ -222,7 +222,7 @@ public class RewardsHandler {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getRewardMessage(folder, rewardNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)
                             .replace("%number%", String.valueOf((int) result))
                             .replace("%prize%", prize)
                     ));
@@ -239,7 +239,7 @@ public class RewardsHandler {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getRewardMessage(folder, rewardNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -248,7 +248,7 @@ public class RewardsHandler {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getRewardMessage(folder, rewardNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -273,9 +273,9 @@ public class RewardsHandler {
 
                 }
 
-                if (!MessageGetters.getRewardMessage(folder, rewardNum).equalsIgnoreCase("none")) {
+                if (!MessageHandlers.getRewardMessage(folder, rewardNum).equalsIgnoreCase("none")) {
 
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getRewardMessage(folder, rewardNum)));
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)));
 
                 }
 

@@ -7,14 +7,12 @@ import com.lypaka.pixelskills.Skills.Breeder;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
 import com.lypaka.pixelskills.Utils.IVModifier;
-import com.lypaka.pixelskills.Utils.MessageGetters;
+import com.lypaka.pixelskills.Utils.MessageHandlers;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 
@@ -826,7 +824,7 @@ public class BreederPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Breeder"), task)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Breeder"), task)));
                 break;
 
 
@@ -838,7 +836,7 @@ public class BreederPerks {
                     if (pokemon.getBaseStats().abilities.length == 3) {
 
                         pokemon.setAbility(pokemon.getBaseStats().abilities[2]);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Breeder"), task)));
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Breeder"), task)));
                         break;
 
                     }
@@ -909,7 +907,7 @@ public class BreederPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(4, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(4, perkNum)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -919,7 +917,7 @@ public class BreederPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(4, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(4, perkNum)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -936,7 +934,7 @@ public class BreederPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(4, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(4, perkNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -945,7 +943,7 @@ public class BreederPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(4, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(4, perkNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -970,7 +968,7 @@ public class BreederPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(4, perkNum)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(4, perkNum)));
                 break;
 
         }

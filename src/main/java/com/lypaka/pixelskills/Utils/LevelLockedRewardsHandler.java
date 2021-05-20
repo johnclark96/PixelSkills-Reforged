@@ -118,7 +118,7 @@ public class LevelLockedRewardsHandler {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getLLRewardMessage(folder, rewardNum, option)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -128,7 +128,7 @@ public class LevelLockedRewardsHandler {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getLLRewardMessage(folder, rewardNum, option)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -145,7 +145,7 @@ public class LevelLockedRewardsHandler {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getLLRewardMessage(folder, rewardNum, option)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)
                                 .replace("%prize%", prz)
                         ));
 
@@ -154,7 +154,7 @@ public class LevelLockedRewardsHandler {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getLLRewardMessage(folder, rewardNum, option)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)
                             .replace("%prize%", prize)
                     ));
 
@@ -179,7 +179,7 @@ public class LevelLockedRewardsHandler {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getLLRewardMessage(folder, rewardNum, option)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)));
                 break;
 
         }

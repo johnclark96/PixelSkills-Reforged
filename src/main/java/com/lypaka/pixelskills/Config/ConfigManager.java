@@ -29,27 +29,31 @@ import java.util.concurrent.CompletableFuture;
 public class ConfigManager {
 
     /** Name of the file to grab configuration settings from. */
+    private static final String[] BASE_FILES = {"gui-settings.conf"};
     private static final String[] FILE_NAMES = {"settings.conf", "exp.conf", "perks.conf", "rewards.conf", "level-locked-rewards.conf", "descriptions.conf", "fancy-features.conf"};
-    private static final String[] FOLDER_NAMES = {"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Scanner", "Trader"};
-    //                                                 0               1            2           3           4          5             6           7             8            9           10            11          12        13        14
+    private static final String[] FOLDER_NAMES = {"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
+    //                                                 0               1            2           3           4          5             6           7             8            9           10            11          12        13              14        15
     /** Paths needed to locate the configuration file. */
     private static Path dir;
     private static Path playerDir;
     private static Path mainPlayerDir;
     private static Path[][] skillsDir = new Path[FOLDER_NAMES.length][FILE_NAMES.length];
     private static Path mainSkillsDir;
+    private static Path[] baseConfig = new Path[BASE_FILES.length];
     private static Path[] config = new Path[FOLDER_NAMES.length];
     private static Path[] config2 = new Path[FILE_NAMES.length];
     private static Map<UUID, Path> playerConfig = new HashMap<UUID, Path>();
     /** Loader for the configuration file. */
     private static ArrayList<ConfigurationLoader<CommentedConfigurationNode>> folderLoad = new ArrayList<>(FOLDER_NAMES.length);
     private static ArrayList<ConfigurationLoader<CommentedConfigurationNode>> fileLoad = new ArrayList<>(FILE_NAMES.length);
+    private static ArrayList<ConfigurationLoader<CommentedConfigurationNode>> baseLoad = new ArrayList<>(BASE_FILES.length);
 
     private static ArrayList<ArrayList<ConfigurationLoader<CommentedConfigurationNode>>> configLoad = new ArrayList<ArrayList<ConfigurationLoader<CommentedConfigurationNode>>>(84);
     private static Map<UUID, ConfigurationLoader<CommentedConfigurationNode>> playerConfigLoad = new HashMap<UUID, ConfigurationLoader<CommentedConfigurationNode>>();
     /** Storage for all the configuration settings. */
     private static CommentedConfigurationNode[][] configNode = new CommentedConfigurationNode[FOLDER_NAMES.length][FILE_NAMES.length];
     private static Map<UUID, CommentedConfigurationNode> playerConfigNode = new HashMap<UUID, CommentedConfigurationNode>();
+    private static CommentedConfigurationNode[] baseNode = new CommentedConfigurationNode[BASE_FILES.length];
 
     private static boolean isSaving = false;
 
@@ -75,8 +79,15 @@ public class ConfigManager {
             ConfigSetters.setTasksAndAccessPerm(i);
 
         }
+
+        for (int i = 0; i < BASE_FILES.length; i++) {
+
+            baseConfig[i] = dir.resolve(BASE_FILES[i]);
+
+        }
+
         //save();
-        //load();
+        load();
     }
 
     public static Path checkDir(Path dir) {
@@ -108,6 +119,16 @@ public class ConfigManager {
                     configLoad.add(i, folderLoad);
                     configNode[i][j] = tempConfigLoad.load();
                 }
+            }
+
+            for (int i = 0; i < BASE_FILES.length; i++) {
+
+                PixelSkills.getContainer().getAsset(BASE_FILES[i]).get().copyToFile(baseConfig[i], false, true);
+                ConfigurationLoader<CommentedConfigurationNode> tempConfigLoad = HoconConfigurationLoader.builder().setPath(baseConfig[i]).build();
+
+                baseLoad.add(i, tempConfigLoad);
+                baseNode[i] = tempConfigLoad.load();
+
             }
 
         } catch (IOException e){
@@ -169,6 +190,20 @@ public class ConfigManager {
 
             }
 
+            for (int i = 0; i < BASE_FILES.length; i++) {
+
+                try {
+
+                    baseLoad.get(i).save(baseNode[i]);
+
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+
+                }
+
+            }
+
         }).async().submit(PixelSkills.INSTANCE);
     }
 
@@ -211,6 +246,12 @@ public class ConfigManager {
 
     public static CommentedConfigurationNode getPlayerConfigNode(UUID uuid, Object... node){
         return playerConfigNode.get(uuid).getNode(node);
+    }
+
+    public static CommentedConfigurationNode getBaseNode (int index, Object... node) {
+
+        return baseNode[index].getNode(node);
+
     }
 
 

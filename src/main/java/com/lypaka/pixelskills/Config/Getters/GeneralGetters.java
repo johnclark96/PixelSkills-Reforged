@@ -73,8 +73,10 @@ public class GeneralGetters {
             case 12:
                 return "Looter";
             case 13:
-                return "Scanner";
+                return "Photographer";
             case 14:
+                return "Teacher";
+            case 15:
                 return "Trader";
 
         }
@@ -113,10 +115,12 @@ public class GeneralGetters {
                 return 11;
             case "Looter":
                 return 12;
-            case "Scanner":
+            case "Photographer":
                 return 13;
-            case "Trader":
+            case "Teacher":
                 return 14;
+            case "Trader":
+                return 15;
 
         }
 

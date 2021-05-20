@@ -6,13 +6,12 @@ import com.lypaka.pixelskills.Config.Getters.PerkGetters;
 import com.lypaka.pixelskills.Skills.Botanist;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
-import com.lypaka.pixelskills.Utils.MessageGetters;
+import com.lypaka.pixelskills.Utils.MessageHandlers;
 import com.pixelmonmod.pixelmon.blocks.tileEntities.TileEntityApricornTree;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 
@@ -821,7 +820,7 @@ public class BotanistPerks {
 
                 String item = Botanist.getItem();
                 Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + item + " " + (int) result);
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Botanist"), task)
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Botanist"), task)
                     .replace("%number%", String.valueOf(result))
                 ));
                 break;
@@ -844,7 +843,7 @@ public class BotanistPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Botanist"), task)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Botanist"), task)));
                 break;
 
         }
@@ -911,7 +910,7 @@ public class BotanistPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(3, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(3, perkNum)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -921,7 +920,7 @@ public class BotanistPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(3, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(3, perkNum)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -938,7 +937,7 @@ public class BotanistPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(3, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(3, perkNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -947,7 +946,7 @@ public class BotanistPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(3, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(3, perkNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -972,7 +971,7 @@ public class BotanistPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(3, perkNum)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(3, perkNum)));
                 break;
 
         }

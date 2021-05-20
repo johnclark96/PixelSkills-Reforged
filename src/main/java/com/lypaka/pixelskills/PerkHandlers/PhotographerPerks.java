@@ -3,11 +3,11 @@ package com.lypaka.pixelskills.PerkHandlers;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.PerkGetters;
-import com.lypaka.pixelskills.Skills.Archaeologist;
+import com.lypaka.pixelskills.Skills.Photographer;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
-import com.lypaka.pixelskills.Utils.IVModifier;
 import com.lypaka.pixelskills.Utils.MessageHandlers;
+import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -15,7 +15,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import java.util.Map;
 import java.util.Random;
 
-public class ArchaeologistPerks {
+public class PhotographerPerks {
 
     public static boolean doesPerkTrigger (int folder, Player player, String task) {
 
@@ -783,81 +783,45 @@ public class ArchaeologistPerks {
 
     private static void givePerk (String task, Player player) throws ObjectMappingException {
 
-        String[] modifier;
-        String function;
+        int amount = Integer.parseInt(PerkGetters.getPerkModifiers(13, "").get("Amount"));
+        String[] modifier = PerkGetters.getPerkModifiers(13, "").get("Modifier").split(" ");
+        String function = modifier[0];
         double num;
         double result = 0;
 
-        switch (task) {
+        if (modifier[1].equalsIgnoreCase("%player-level%")) {
 
-            case "Mining-Fossils":
+            num = AccountsHandler.getLevel("Photographer", player);
 
-                int amount = Integer.parseInt(PerkGetters.getPerkModifiers(0, task).get("Amount"));
-                modifier = PerkGetters.getPerkModifiers(0, task).get("Modifier").split(" ");
-                function = modifier[0];
+        } else {
 
-                if (modifier[1].equalsIgnoreCase("%player-level%")) {
+            num = Double.parseDouble(modifier[1]);
 
-                    num = AccountsHandler.getLevel("Archaeologist", player);
+        }
 
-                } else {
+        switch (function) {
 
-                    num = Double.parseDouble(modifier[1]);
-
-                }
-
-                switch (function) {
-
-                    case "add":
-                        result = num + amount;
-                        break;
-
-                    case "multiply":
-                        result = num * amount;
-                        break;
-
-                }
-
-                Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " pixelmon:fossil " + (int) result);
-                player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Archaeologist"), "Mining-Fossils")
-                    .replace("%number%", String.valueOf(result))
-                ));
+            case "add":
+                result = num + amount;
                 break;
 
-            case "Reviving-Fossils":
-
-                modifier = PerkGetters.getPerkModifiers(0, task).get("Modifier").split(" ");
-                function = modifier[0];
-                String[] ivs = PerkGetters.getPerkModifiers(0, task).get("Modify-Stats").split(", ");
-
-                if (modifier[1].equalsIgnoreCase("%player-level%")) {
-
-                    num = AccountsHandler.getLevel("Archaeologist", player);
-
-                } else {
-
-                    num = Double.parseDouble(modifier[1]);
-
-                }
-
-                for (String stat : ivs) {
-
-                    IVModifier.modifyIVs(Archaeologist.getPokeToModify(), stat, num, function);
-
-                }
-
-                player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Archaeologist"), "Reviving-Fossils")
-                        .replace("%number%", String.valueOf(result))
-                ));
+            case "multiply":
+                result = num * amount;
                 break;
 
         }
+
+        EntityPixelmon pokemon = Photographer.photographedMon;
+        int catchrate = AccountsHandler.getCatchrateModifier(player, pokemon.getName());
+        int newRate = catchrate + (int) result;
+        AccountsHandler.setCatchrateModifier(player, pokemon.getName(), newRate);
+        player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Photographer"), "")));
 
     }
 
     private static void giveCustomPerk (Player player) throws ObjectMappingException {
 
-        int options = PerkGetters.getCustomPerkAmount(0);
+        int options = PerkGetters.getCustomPerkAmount(13);
         Map<String, String> map;
         int perkNum = 0;
 
@@ -865,12 +829,12 @@ public class ArchaeologistPerks {
 
             Random random = new Random();
             int rng = random.nextInt(options) + 1;
-            map = PerkGetters.getCustomPerkMap(0, rng);
+            map = PerkGetters.getCustomPerkMap(13, rng);
             perkNum = rng;
 
         } else {
 
-            map = PerkGetters.getCustomPerkMap(0, 1);
+            map = PerkGetters.getCustomPerkMap(13, 1);
             perkNum = 1;
 
         }
@@ -885,7 +849,7 @@ public class ArchaeologistPerks {
 
         if (modifier[1].equalsIgnoreCase("%player-level%")) {
 
-            modNum = AccountsHandler.getLevel("Archaeologist", player);
+            modNum = AccountsHandler.getLevel("Photographer", player);
 
         } else {
 
@@ -915,7 +879,7 @@ public class ArchaeologistPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(0, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(13, perkNum)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -925,7 +889,7 @@ public class ArchaeologistPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(0, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(13, perkNum)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -942,7 +906,7 @@ public class ArchaeologistPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(0, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(13, perkNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -951,7 +915,7 @@ public class ArchaeologistPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(0, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(13, perkNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -976,7 +940,7 @@ public class ArchaeologistPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(0, perkNum)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(13, perkNum)));
                 break;
 
         }

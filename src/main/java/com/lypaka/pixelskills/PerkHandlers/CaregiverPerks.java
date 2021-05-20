@@ -6,7 +6,7 @@ import com.lypaka.pixelskills.Config.Getters.PerkGetters;
 import com.lypaka.pixelskills.Skills.Caregiver;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
-import com.lypaka.pixelskills.Utils.MessageGetters;
+import com.lypaka.pixelskills.Utils.MessageHandlers;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -813,7 +813,7 @@ public class CaregiverPerks {
 
         Caregiver.finalMod = (float) (Caregiver.healAmount + result);
         Caregiver.perkTriggered = true;
-        player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Caregiver"), "")));
+        player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Caregiver"), "")));
 
     }
 
@@ -877,7 +877,7 @@ public class CaregiverPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(5, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(5, perkNum)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -887,7 +887,7 @@ public class CaregiverPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(5, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(5, perkNum)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -904,7 +904,7 @@ public class CaregiverPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(5, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(5, perkNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -913,7 +913,7 @@ public class CaregiverPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(5, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(5, perkNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -938,7 +938,7 @@ public class CaregiverPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(5, perkNum)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(5, perkNum)));
                 break;
 
         }

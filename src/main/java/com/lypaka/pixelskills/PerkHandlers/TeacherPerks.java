@@ -3,20 +3,20 @@ package com.lypaka.pixelskills.PerkHandlers;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.PerkGetters;
-import com.lypaka.pixelskills.Skills.Scanner;
+import com.lypaka.pixelskills.Skills.Teacher;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
-import com.lypaka.pixelskills.Utils.MessageGetters;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
+import com.lypaka.pixelskills.Utils.MessageHandlers;
+import com.pixelmonmod.pixelmon.battles.attacks.Attack;
+import com.pixelmonmod.pixelmon.comm.EnumUpdateType;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Random;
 
-public class ScannerPerks {
+public class TeacherPerks {
 
     public static boolean doesPerkTrigger (int folder, Player player, String task) {
 
@@ -768,7 +768,7 @@ public class ScannerPerks {
         switch (perkTriggerMode) {
 
             case "default":
-                givePerk(task, player);
+                givePerk(player);
                 break;
 
             case "custom":
@@ -777,52 +777,29 @@ public class ScannerPerks {
 
         }
 
-
-
     }
 
+    private static void givePerk (Player player) {
 
-    private static void givePerk (String task, Player player) throws ObjectMappingException {
-        
-        String[] modifier = PerkGetters.getPerkModifiers(13, "").get("Modifier").split(" ");
-        int amount = Integer.parseInt(modifier[1]);
-        String function = modifier[0];
-        double num;
-        double result = 0;
+        for (Attack a : Teacher.pokemon.getPokemonData().getMoveset().attacks) {
 
-        if (modifier[1].equalsIgnoreCase("%player-level%")) {
+            if (a == Teacher.attack) {
 
-            num = AccountsHandler.getLevel("Scanner", player);
-
-        } else {
-
-            num = Double.parseDouble(modifier[1]);
-
-        }
-
-        switch (function) {
-
-            case "add":
-                result = num + amount;
+                //a.ppBase = a.getAttackBase().ppMax;
+                a.pp = a.getMaxPP();
+                Teacher.pokemon.update(EnumUpdateType.Moveset);
                 break;
 
-            case "multiply":
-                result = num * amount;
-                break;
+            }
 
         }
-
-        EntityPixelmon pokemon = Scanner.scannedMon;
-        int catchrate = AccountsHandler.getCatchrateModifier(player, pokemon.getName());
-        int newRate = catchrate + (int) result;
-        AccountsHandler.setCatchrateModifier(player, pokemon.getName(), newRate);
-        player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Scanner"), "")));
+        player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Teacher"), "")));
 
     }
 
     private static void giveCustomPerk (Player player) throws ObjectMappingException {
 
-        int options = PerkGetters.getCustomPerkAmount(13);
+        int options = PerkGetters.getCustomPerkAmount(14);
         Map<String, String> map;
         int perkNum = 0;
 
@@ -830,12 +807,12 @@ public class ScannerPerks {
 
             Random random = new Random();
             int rng = random.nextInt(options) + 1;
-            map = PerkGetters.getCustomPerkMap(13, rng);
+            map = PerkGetters.getCustomPerkMap(14, rng);
             perkNum = rng;
 
         } else {
 
-            map = PerkGetters.getCustomPerkMap(13, 1);
+            map = PerkGetters.getCustomPerkMap(14, 1);
             perkNum = 1;
 
         }
@@ -850,7 +827,7 @@ public class ScannerPerks {
 
         if (modifier[1].equalsIgnoreCase("%player-level%")) {
 
-            modNum = AccountsHandler.getLevel("Scanner", player);
+            modNum = AccountsHandler.getLevel("Teacher", player);
 
         } else {
 
@@ -880,7 +857,7 @@ public class ScannerPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(13, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(14, perkNum)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -890,7 +867,7 @@ public class ScannerPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(13, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(14, perkNum)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -907,7 +884,7 @@ public class ScannerPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(13, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(14, perkNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -916,7 +893,7 @@ public class ScannerPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(13, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(14, perkNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -941,11 +918,11 @@ public class ScannerPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(13, perkNum)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(14, perkNum)));
                 break;
 
         }
 
     }
-
+    
 }

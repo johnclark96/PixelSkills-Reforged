@@ -23,7 +23,7 @@ public class Collector {
     @SubscribeEvent
     public void onCatchAttempt (CaptureEvent.StartCapture event) {
 
-        if (Scanner.applyModifiers()) {
+        if (Photographer.applyModifiers()) {
 
             Player player = (Player) event.player;
             String pokemon = event.getPokemon().getPokemonName();

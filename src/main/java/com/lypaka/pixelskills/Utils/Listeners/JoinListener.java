@@ -28,21 +28,16 @@ public class JoinListener {
     public void onJoin (ClientConnectionEvent.Join event, @Root Player player) throws ObjectMappingException {
 
         ConfigManager.loadPlayer(player.getUniqueId());
-        Map<String, Integer> map = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Catchrate-Modifiers").getValue(new TypeToken<Map<String, Integer>>() {});
-        if (map == null) {
 
-            PixelSkills.INSTANCE.logger.info("Generating player catch rate modifier nodes!");
-            generateCatchrateNodes(player);
-
-        }
         if (ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "EXP-Messages").isVirtual()) {
 
             generateMessageToggleMap(player);
 
         }
+
         if (ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers").isVirtual()) {
 
-            String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Scanner", "Trader"};
+            String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
             for (String skill : skills) {
 
                 generatePerkTriggers(player, skill);
@@ -50,14 +45,54 @@ public class JoinListener {
             }
 
         }
+
         if (ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Constantly-Display-Skill-Info").isVirtual()) {
 
             ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Constantly-Display-Skill-Info").setValue(false);
 
         }
+
         if (ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account").isVirtual()) {
 
             generateAccountSettings(player);
+
+        }
+
+        checkForMissingSkills(player);
+
+        if (!ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner").isVirtual()) {
+
+            double exp = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "EXP").getDouble();
+            int level = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Level").getInt();
+            double expToNext = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "EXP-To-Next-Level").getDouble();
+            double perkChance = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Perk-Chance").getDouble();
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "EXP").setValue(exp);
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "Level").setValue(level);
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "EXP-To-Next-Level").setValue(expToNext);
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "Perk-Chance").setValue(perkChance);
+            if (!ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Next-Reward-Level").isVirtual()) {
+
+                int rl = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Next-Reward-Level").getInt();
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "Next-Reward-Level").setValue(rl);
+
+            }
+            if (!ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Next-Perk-Level").isVirtual()) {
+
+                int rl = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Next-Perk-Level").getInt();
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "Next-Perk-Level").setValue(rl);
+
+            }
+            if (!ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Reward-Chance").isVirtual()) {
+
+                double rc = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner", "Next-Perk-Level").getInt();
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Photographer", "Next-Perk-Level").setValue(rc);
+
+            }
+
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "EXP-Messages", "Scanner").setValue(null);
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", "Scanner").setValue(null);
+
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Scanner").setValue(null);
 
         }
 
@@ -65,16 +100,17 @@ public class JoinListener {
 
     }
 
-    public static void generateCatchrateNodes (Player player) {
+    public static void generateCatchrateNodes (Player player) throws IOException {
 
         ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Catchrate-Modifiers").setValue(Stream.of(EnumSpecies.values()).collect(Collectors.toMap(a -> a.getPokemonName(), a -> PokemonSpec.from(a.name).create((World) Sponge.getServer().getWorlds().iterator().next()).getBaseStats().catchRate)));
+        ConfigManager.savePlayer(player.getUniqueId());
 
     }
 
     public static void generateMessageToggleMap (Player player) {
 
         Map<String, Boolean> toggleMap = new HashMap<>();
-        String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Scanner", "Trader"};
+        String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
         for (String skill : skills) {
 
             toggleMap.put(skill, true);
@@ -82,6 +118,7 @@ public class JoinListener {
         }
 
         ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "EXP-Messages").setValue(toggleMap);
+        ConfigManager.savePlayer(player.getUniqueId());
 
     }
 
@@ -115,6 +152,8 @@ public class JoinListener {
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Buying-From-Shopkeepers", "Triggered").setValue(false);
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Selling-To-Shopkeepers", "Last-Triggered-Level").setValue(0);
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Selling-To-Shopkeepers", "Triggered").setValue(false);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Buying-From-Vending-Machines", "Last-Triggered-Level").setValue(0);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Buying-From-Vending-Machines", "Triggered").setValue(false);
                 break;
 
             case "Botanist":
@@ -161,6 +200,8 @@ public class JoinListener {
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Kill-Mega-Bosses", "Triggered").setValue(false);
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Kill-Normal-Bosses", "Last-Triggered-Level").setValue(0);
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Kill-Normal-Bosses", "Triggered").setValue(false);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Kill-Totem-Pokemon", "Last-Triggered-Level").setValue(0);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Kill-Totem-Pokemon", "Triggered").setValue(false);
                 break;
 
             case "Darwinist":
@@ -197,10 +238,15 @@ public class JoinListener {
                 ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Opening-Poke-Loot-Chests", "Triggered").setValue(false);
                 break;
 
-            case "Scanner":
+            case "Photographer":
 
-                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Scanning-Pokemon", "Last-Triggered-Level").setValue(0);
-                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Scanning-Pokemon", "Triggered").setValue(false);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Photographing-Pokemon", "Last-Triggered-Level").setValue(0);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Photographing-Pokemon", "Triggered").setValue(false);
+                break;
+
+            case "Teacher":
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Learning-Moves", "Last-Triggered-Level").setValue(0);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Learning-Moves", "Triggered").setValue(false);
                 break;
 
             case "Trader":
@@ -213,15 +259,13 @@ public class JoinListener {
 
         }
 
-
     }
 
     public static void generateAccountSettings (Player player) throws ObjectMappingException {
 
         int level = 1;
         double perkChance = 0.0;
-        String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Scanner", "Trader"};
-
+        String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
         if (!AccountsHandler.hasAccountGenerated(player)) {
 
             for (String skill : skills) {
@@ -250,5 +294,41 @@ public class JoinListener {
 
     }
 
+    public static void checkForMissingSkills (Player player) throws ObjectMappingException {
+
+        String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
+        int level = 1;
+        double perkChance = 0.0;
+        for (String skill : skills) {
+
+            if (ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill).isVirtual()) {
+
+                int conf = GeneralGetters.getConfigFromSkill(skill);
+
+                if (EXPGetters.getEXPMode(conf).equalsIgnoreCase("calculated")) {
+
+                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP-To-Next-Level").setValue(EXPGetters.getBaseEXP(conf));
+
+                } else {
+
+                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP-To-Next-Level").setValue(EXPGetters.getManualEXPAmount(conf, 2));
+
+                }
+
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0.0);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Level").setValue(level);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Perk-Chance").setValue(perkChance);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Account-Generated").setValue(true);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "Perk-Triggers", skill, "Learning-Moves", "Last-Triggered-Level").setValue(0);
+                generatePerkTriggers(player, skill);
+                Map<String, Boolean> toggleMap = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "EXP-Messages").getValue(new TypeToken<Map<String, Boolean>>() {});
+                toggleMap.put(skill, true);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "EXP-Messages").setValue(toggleMap);
+
+            }
+
+        }
+
+    }
 
 }

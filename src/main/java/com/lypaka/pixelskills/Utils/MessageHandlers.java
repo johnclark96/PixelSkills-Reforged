@@ -1,14 +1,18 @@
 package com.lypaka.pixelskills.Utils;
 
 import com.lypaka.pixelskills.Config.ConfigManager;
+import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.LevelLockedRewardGetters;
 import com.lypaka.pixelskills.Config.Getters.PerkGetters;
 import com.lypaka.pixelskills.Config.Getters.RewardGetters;
+import com.lypaka.pixelskills.FancyFeatures.FancyFeaturesGetters;
+import com.lypaka.pixelskills.FancyFeatures.FancyFeaturesHandler;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.Map;
 
-public class MessageGetters {
+public class MessageHandlers {
 
     public static String getEXPGained (int folder) {
 
@@ -81,6 +85,63 @@ public class MessageGetters {
         Map<String, String> map = LevelLockedRewardGetters.getRewardMap(folder, num, option);
 
         return map.get("Send-Message");
+
+    }
+
+    public static void sendEXPMessages (Player player, double exp, String skill) throws ObjectMappingException {
+
+        String value;
+        int conf = GeneralGetters.getConfigFromSkill(skill);
+        if (exp != 1) {
+
+            value = "points";
+
+        } else {
+
+            value = "point";
+
+        }
+
+        if (GeneralGetters.areMessagesEnabled(skill, "EXP")) {
+
+            if (AccountsHandler.areMessagesEnabled(player, skill)) {
+
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getEXPGained(11)
+                        .replace("points", value)
+                        .replace("%exp%", String.valueOf(exp))
+                        .replace("%skill%", skill)
+                        .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
+                ));
+
+            }
+
+        }
+
+        if (FancyFeaturesGetters.showActionBar(conf, "EXP")) {
+
+            FancyFeaturesHandler.sendActionBar(player, conf, "EXP");
+
+        }
+        if (FancyFeaturesGetters.showBossBar(conf)) {
+
+            FancyFeaturesHandler.displayBar(player, skill);
+
+        }
+        if (FancyFeaturesGetters.sendTitleMessages(conf, "EXP")) {
+
+            FancyFeaturesHandler.sendTitle(player, conf, "EXP");
+
+        }
+        if (FancyFeaturesGetters.doEffects(conf, "EXP")) {
+
+            FancyFeaturesHandler.spawnParticles(player, conf, "EXP");
+
+        }
+        if (FancyFeaturesGetters.playSounds(conf, "EXP")) {
+
+            FancyFeaturesHandler.playSound(player, conf, "EXP");
+
+        }
 
     }
 

@@ -150,15 +150,25 @@ public class PerkHandler {
 
             case 13:
 
-                if (ScannerPerks.doesPerkTrigger(folder, player, task)) {
+                if (PhotographerPerks.doesPerkTrigger(folder, player, task)) {
 
-                    ScannerPerks.runPerkCode(folder, task, player);
+                    PhotographerPerks.runPerkCode(folder, task, player);
 
                 }
 
                 break;
 
             case 14:
+
+                if (TeacherPerks.doesPerkTrigger(folder, player, task)) {
+
+                    TeacherPerks.runPerkCode(folder, task, player);
+
+                }
+
+                break;
+
+            case 15:
 
                 if (TraderPerks.doesPerkTrigger(folder, player, task)) {
 
@@ -306,17 +316,17 @@ public class PerkHandler {
 
                 break;
 
-            case 13:
+            case 14:
 
-                if (ScannerPerks.doesPerkTrigger(folder, player, level, task)) {
+                if (TeacherPerks.doesPerkTrigger(folder, player, level, task)) {
 
-                    ScannerPerks.runPerkCode(folder, task, player);
+                    TeacherPerks.runPerkCode(folder, task, player);
 
                 }
 
                 break;
 
-            case 14:
+            case 15:
 
                 if (TraderPerks.doesPerkTrigger(folder, player, level, task)) {
 

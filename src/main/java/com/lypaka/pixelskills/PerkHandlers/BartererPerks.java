@@ -7,7 +7,7 @@ import com.lypaka.pixelskills.PixelSkills;
 import com.lypaka.pixelskills.Skills.Barterer;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
-import com.lypaka.pixelskills.Utils.MessageGetters;
+import com.lypaka.pixelskills.Utils.MessageHandlers;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -18,7 +18,6 @@ import org.spongepowered.api.service.economy.Currency;
 import org.spongepowered.api.service.economy.EconomyService;
 import org.spongepowered.api.service.economy.account.UniqueAccount;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;
@@ -838,7 +837,7 @@ public class BartererPerks {
 
                 String item = Barterer.getItem();
                 Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + item + " " + (int) result);
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Barterer"), task)
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Barterer"), task)
                     .replace("%number%", String.valueOf((int) result))
                 ));
                 break;
@@ -854,7 +853,7 @@ public class BartererPerks {
 
                         Currency defaultCur = econ.get().getDefaultCurrency();
                         a.get().deposit(defaultCur, BigDecimal.valueOf(result), Cause.of(eventContext, PixelSkills.getContainer()));
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getPerkMessage(GeneralGetters.getConfigFromSkill("Barterer"), task)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill("Barterer"), task)
                                 .replace("%money%", String.valueOf(result))
                         ));
                         break;
@@ -929,7 +928,7 @@ public class BartererPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(2, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(2, perkNum)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
                         ));
@@ -939,7 +938,7 @@ public class BartererPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(2, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(2, perkNum)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)
                     ));
@@ -956,7 +955,7 @@ public class BartererPerks {
                     for (String prz : prizes) {
 
                         Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prz);
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(2, perkNum)
+                        player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(2, perkNum)
                                 .replace("%prize%", prz)
                         ));
 
@@ -965,7 +964,7 @@ public class BartererPerks {
                 } else {
 
                     Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "pokegive " + player.getName() + " " + prize);
-                    player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(2, perkNum)
+                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(2, perkNum)
                             .replace("%prize%", prize)
                     ));
 
@@ -990,7 +989,7 @@ public class BartererPerks {
 
                 }
 
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getCustomPerkMessage(2, perkNum)));
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getCustomPerkMessage(2, perkNum)));
                 break;
 
         }

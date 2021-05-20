@@ -12,6 +12,7 @@ import com.lypaka.pixelskills.Utils.Listeners.PokemonEXPGainListener;
 import com.lypaka.pixelskills.Utils.Listeners.UseItemEventListener;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import net.minecraftforge.common.MinecraftForge;
+import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandResult;
@@ -32,7 +33,7 @@ import java.util.Random;
 @Plugin(
         id = "pixelskills",
         name = "PixelSkills",
-        version = "1.0.2-alpha-Reforged",
+        version = "2.0.0-Reforged",
         dependencies = {@Dependency(id = "pixelmon")}
 )
 public class PixelSkills {
@@ -50,6 +51,9 @@ public class PixelSkills {
     public static PixelSkills INSTANCE;
     private static final Random random = new Random();
     public static boolean isPixelBoostersLoaded = false;
+
+    public static String[] skills = new String[]{"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
+
 
     @Listener
     public void onPreInit (GamePreInitializationEvent event) throws IOException {
@@ -94,7 +98,11 @@ public class PixelSkills {
 
                     // Let's do an experiment
                     Player player = (Player) sender;
-                    SkillInfoPage.openSkillInfoPage(player);
+                    try {
+                        SkillInfoPage.openSkillInfoPage(player);
+                    } catch (ObjectMappingException e) {
+                        e.printStackTrace();
+                    }
 
                     return CommandResult.success();
 
@@ -110,7 +118,6 @@ public class PixelSkills {
 
     private void registerSkillEvents() {
 
-        //Pixelmon.EVENT_BUS.register(new Arcanist());
         Pixelmon.EVENT_BUS.register(new Archaeologist());
         Pixelmon.EVENT_BUS.register(new Barterer());
         Pixelmon.EVENT_BUS.register(new Botanist());
@@ -124,7 +131,8 @@ public class PixelSkills {
         Pixelmon.EVENT_BUS.register(new Fisherman());
         Pixelmon.EVENT_BUS.register(new Gladiator());
         Pixelmon.EVENT_BUS.register(new Looter());
-        Pixelmon.EVENT_BUS.register(new Scanner());
+        Pixelmon.EVENT_BUS.register(new Photographer());
+        Pixelmon.EVENT_BUS.register(new Teacher());
         Sponge.getEventManager().registerListeners(this, new Harvester());
         logger.info("PixelSkills finished loading the skills!");
 

@@ -5,7 +5,8 @@ import com.lypaka.pixelskills.Config.Getters.*;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.ExperienceHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
-import com.lypaka.pixelskills.Utils.MessageGetters;
+import com.lypaka.pixelskills.Utils.MessageHandlers;
+import com.lypaka.pixelskills.Utils.SkillCandy.CandyItem;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
@@ -13,6 +14,8 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+
+import java.io.IOException;
 
 public class AdminCommand {
 
@@ -145,7 +148,7 @@ public class AdminCommand {
 
                             if (exp != 1) {
 
-                                player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
+                                player.sendMessage(FancyText.getFancyText(MessageHandlers.getEXPGained(conf)
                                         .replace("%exp%", String.valueOf(exp))
                                         .replace("%skill%", skill)
                                         .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
@@ -153,7 +156,7 @@ public class AdminCommand {
 
                             } else {
 
-                                player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
+                                player.sendMessage(FancyText.getFancyText(MessageHandlers.getEXPGained(conf)
                                         .replace("points", "point")
                                         .replace("%exp%", String.valueOf(exp))
                                         .replace("%skill%", skill)
@@ -165,11 +168,11 @@ public class AdminCommand {
 
                         if (ExperienceHandler.didLevelUp(skill, player)) {
 
-                            ExperienceHandler.levelUp(skill, player);
+                            ExperienceHandler.levelUp(skill, player, false);
 
                         }
 
-                    } catch (ObjectMappingException e) {
+                    } catch (ObjectMappingException | IOException e) {
 
                         e.printStackTrace();
 
@@ -323,6 +326,34 @@ public class AdminCommand {
                 })
                 .build();
 
+        CommandSpec giveCandy = CommandSpec.builder()
+                .arguments(
+                        GenericArguments.player(Text.of("player")),
+                        GenericArguments.optional(GenericArguments.integer(Text.of("amount")))
+                )
+                .executor((sender, context) -> {
+
+                    Player player = (Player) context.getOne("player").get();
+                    int amount;
+                    if (context.getOne("amount").isPresent()) {
+
+                        amount = (int) context.getOne("amount").get();
+
+                    } else {
+
+                        amount = 1;
+
+                    }
+
+                    player.getInventory().offer(CandyItem.getSkillCandy(amount));
+                    sender.sendMessage(Text.of(TextColors.GREEN, "Successfully gave " + player.getName() + " " + amount + " Skill Candy!"));
+                    player.sendMessage(Text.of(TextColors.AQUA, "You've received " + amount + " Skill Candy!"));
+
+                    return CommandResult.success();
+
+                })
+                .build();
+
         return CommandSpec.builder()
                 .child(checkLevel, "checklevel", "checklvl")
                 .child(levelUp, "lvlup", "levelup")
@@ -335,6 +366,7 @@ public class AdminCommand {
                 .child(reload, "reload")
                 .child(toggle, "toggle")
                 .child(msgToggle, "msgtoggle")
+                .child(giveCandy, "give")
                 .permission("pixelskills.command.admin")
                 .executor((sender, context) -> {return CommandResult.success();}).build();
 
@@ -383,8 +415,11 @@ public class AdminCommand {
             case "looter":
                 return "Looter";
 
-            case "scanner":
-                return "Scanner";
+            case "photographer":
+                return "Photographer";
+
+            case "teacher":
+                return "Teacher";
                 
             case "trader":
                 return "Trader";

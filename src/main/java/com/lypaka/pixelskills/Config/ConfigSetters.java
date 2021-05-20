@@ -403,10 +403,31 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 0, "Node-Generated").isVirtual()) {
 
-                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Scanning-Pokemon", "EXP-Gained-Per-Task").setValue(1);
-                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Scanning-Pokemon", "Modifiers").setValue(modifiersMap);
-                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Scanning-Pokemon", "Perk-Enabled").setValue(true);
-                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Scanning-Pokemon", "Task-Enabled").setValue(true);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Photographing-Pokemon", "EXP-Gained-Per-Task").setValue(1);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Photographing-Pokemon", "Modifiers").setValue(modifiersMap);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Photographing-Pokemon", "Perk-Enabled").setValue(true);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Photographing-Pokemon", "Task-Enabled").setValue(true);
+                    skill = GeneralGetters.getSkillFromConfigNumber(folder).toLowerCase();
+                    ConfigManager.getConfigNode(folder, 0, "Access-Permission").setValue("pixelskills." + skill + ".unlocked");
+                    ConfigManager.getConfigNode(folder, 0, "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
+                    ConfigManager.getConfigNode(folder, 0, "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 0, "Update-Player-Accounts-To-New-Automated-System").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 0, "Update-Player-Accounts-To-New-Automated-System").setValue(false);
+
+                }
+                ConfigManager.saveSkill(folder, 0);
+                break;
+
+            case 14:
+                if (ConfigManager.getConfigNode(folder, 0, "Node-Generated").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Learning-Moves", "EXP-Gained-Per-Task").setValue(1);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Learning-Moves", "Modifiers").setValue(modifiersMap);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Learning-Moves", "Perk-Enabled").setValue(true);
+                    ConfigManager.getConfigNode(folder, 0, "Tasks", "Learning-Moves", "Task-Enabled").setValue(true);
                     skill = GeneralGetters.getSkillFromConfigNumber(folder).toLowerCase();
                     ConfigManager.getConfigNode(folder, 0, "Access-Permission").setValue("pixelskills." + skill + ".unlocked");
                     ConfigManager.getConfigNode(folder, 0, "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
@@ -422,7 +443,7 @@ public class ConfigSetters {
                 break;
 
 
-            case 14:
+            case 15:
 
                 if (ConfigManager.getConfigNode(folder, 0, "Node-Generated").isVirtual()) {
 
@@ -702,11 +723,20 @@ public class ConfigSetters {
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Modifier").setValue("add 1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Send-Message").setValue("You've got a firm understanding of how to catch this Pokemon!");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Apply-Catchrate-Modifier").setValue(true);
-                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Despawn-Scanned-Pokemon").setValue(true);
-                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Despawn-Delay").setValue(3);
-                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Despawn-Delay").setComment("The amount of seconds of a delay before despawning the Pokemon");
-                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Damage-Lens").setValue(false);
-                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Scanning-Player-Pokemon-Gives-EXP").setValue(false);
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Despawn-Photographed-Pokemon").setValue(true);
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Photographing-Player-Pokemon-Gives-EXP").setValue(false);
+                    ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
+                    ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                ConfigManager.saveSkill(folder, 2);
+                break;
+
+            case 14:
+
+                if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Send-Message").setValue("That move got maxed out!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
 
@@ -715,7 +745,7 @@ public class ConfigSetters {
                 break;
 
 
-            case 14:
+            case 15:
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 

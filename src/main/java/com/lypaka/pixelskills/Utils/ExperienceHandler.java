@@ -12,9 +12,15 @@ import com.lypaka.pixelskills.PixelSkills;
 import com.lypaka.pixelskills.Skills.Artificer;
 import com.lypaka.pixelskills.Skills.Barterer;
 import com.lypaka.pixelskills.Skills.Gladiator;
+import com.lypaka.pixelskills.Utils.CustomEvents.SkillExperienceEvent;
+import com.lypaka.pixelskills.Utils.CustomEvents.SkillLevelUpEvent;
 import com.lypaka.pixelskills.Utils.Listeners.JoinListener;
+import net.minecraftforge.common.MinecraftForge;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -40,7 +46,7 @@ public class ExperienceHandler {
             startingLvl = AccountsHandler.getLevel(skill, player);
             if (didLevelUp(skill, player)) {
 
-                levelUp(skill, player);
+                levelUp(skill, player, false);
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
 
@@ -50,12 +56,12 @@ public class ExperienceHandler {
 
                 }
 
-
             }
 
         }
 
         // Runs perk code
+
         if (PerkGetters.taskPerkEnabled(conf, task)) {
 
             PerkHandler.runPerkCode(conf, task, player);
@@ -99,7 +105,7 @@ public class ExperienceHandler {
             startingLvl = AccountsHandler.getLevel("Artificer", player);
             if (didLevelUp("Artificer", player)) {
 
-                levelUp("Artificer", player);
+                levelUp("Artificer", player, false);
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
 
@@ -152,7 +158,7 @@ public class ExperienceHandler {
             startingLvl = AccountsHandler.getLevel("Harvester", player);
             if (didLevelUp("Harvester", player)) {
 
-                levelUp("Harvester", player);
+                levelUp("Harvester", player, false);
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
 
@@ -225,59 +231,8 @@ public class ExperienceHandler {
             }
 
             newEXP = ExperienceHandler.getPrettyDouble(useEXP) + ExperienceHandler.getPrettyDouble(currentEXP);
+            giveEXP(player, getPrettyDouble(newEXP), skill);
 
-            if (GeneralGetters.areMessagesEnabled(skill, "EXP")) {
-
-                if (AccountsHandler.areMessagesEnabled(player, skill)) {
-
-                    if (exp != 1) {
-
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                .replace("%exp%", String.valueOf(useEXP))
-                                .replace("%skill%", skill)
-                                .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                        ));
-
-                    } else {
-
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                .replace("points", "point")
-                                .replace("%exp%", String.valueOf(useEXP))
-                                .replace("%skill%", skill)
-                                .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                        ));
-                    }
-
-                }
-
-            }
-
-            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(ExperienceHandler.getPrettyDouble(newEXP));
-            if (FancyFeaturesGetters.showActionBar(conf, "EXP")) {
-
-                FancyFeaturesHandler.sendActionBar(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.showBossBar(conf)) {
-
-                FancyFeaturesHandler.displayBar(player, skill);
-
-            }
-            if (FancyFeaturesGetters.sendTitleMessages(conf, "EXP")) {
-
-                FancyFeaturesHandler.sendTitle(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.doEffects(conf, "EXP")) {
-
-                FancyFeaturesHandler.spawnParticles(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.playSounds(conf, "EXP")) {
-
-                FancyFeaturesHandler.playSound(player, conf, "EXP");
-
-            }
 
         } else if (task.equalsIgnoreCase("Defeating-Wild-Pokemon")) {
 
@@ -314,33 +269,7 @@ public class ExperienceHandler {
                     }
 
                 }
-                gainedEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(currentEXP);
-
-                if (GeneralGetters.areMessagesEnabled("Gladiator", "EXP")) {
-
-                    if (AccountsHandler.areMessagesEnabled(player, "Gladiator")) {
-
-                        if (exp != 1) {
-
-                            player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                    .replace("%exp%", String.valueOf(exp))
-                                    .replace("%skill%", skill)
-                                    .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                            ));
-
-                        } else {
-
-                            player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                    .replace("points", "point")
-                                    .replace("%exp%", String.valueOf(exp))
-                                    .replace("%skill%", skill)
-                                    .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                            ));
-                        }
-
-                    }
-
-                }
+                gainedEXP = ExperienceHandler.getPrettyDouble(modEXP) + ExperienceHandler.getPrettyDouble(currentEXP);
 
             } else {
 
@@ -372,57 +301,9 @@ public class ExperienceHandler {
 
                 gainedEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(currentEXP);
 
-                if (AccountsHandler.areMessagesEnabled(player, "Gladiator")) {
-
-                    if (exp != 1) {
-
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                .replace("%exp%", String.valueOf(exp))
-                                .replace("%skill%", skill)
-                                .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                        ));
-
-                    } else {
-
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                .replace("points", "point")
-                                .replace("%exp%", String.valueOf(exp))
-                                .replace("%skill%", skill)
-                                .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                        ));
-                    }
-
-                }
-
             }
 
-            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(ExperienceHandler.getPrettyDouble(gainedEXP));
-            if (FancyFeaturesGetters.showActionBar(conf, "EXP")) {
-
-                FancyFeaturesHandler.sendActionBar(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.showBossBar(conf)) {
-
-                FancyFeaturesHandler.displayBar(player, skill);
-
-            }
-            if (FancyFeaturesGetters.sendTitleMessages(conf, "EXP")) {
-
-                FancyFeaturesHandler.sendTitle(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.doEffects(conf, "EXP")) {
-
-                FancyFeaturesHandler.spawnParticles(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.playSounds(conf, "EXP")) {
-
-                FancyFeaturesHandler.playSound(player, conf, "EXP");
-
-            }
-
+            giveEXP(player, getPrettyDouble(gainedEXP), skill);
 
         } else {
 
@@ -452,60 +333,8 @@ public class ExperienceHandler {
 
             }
 
-            double newEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(currentEXP);
-
-            if (GeneralGetters.areMessagesEnabled("Gladiator", "EXP")) {
-
-                if (AccountsHandler.areMessagesEnabled(player, "Gladiator")) {
-
-                    if (exp != 1) {
-
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                .replace("%exp%", String.valueOf(exp))
-                                .replace("%skill%", skill)
-                                .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                        ));
-
-                    } else {
-
-                        player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(conf)
-                                .replace("points", "point")
-                                .replace("%exp%", String.valueOf(exp))
-                                .replace("%skill%", skill)
-                                .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                        ));
-                    }
-
-                }
-
-            }
-
-            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
-            if (FancyFeaturesGetters.showActionBar(conf, "EXP")) {
-
-                FancyFeaturesHandler.sendActionBar(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.showBossBar(conf)) {
-
-                FancyFeaturesHandler.displayBar(player, skill);
-
-            }
-            if (FancyFeaturesGetters.sendTitleMessages(conf, "EXP")) {
-
-                FancyFeaturesHandler.sendTitle(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.doEffects(conf, "EXP")) {
-
-                FancyFeaturesHandler.spawnParticles(player, conf, "EXP");
-
-            }
-            if (FancyFeaturesGetters.playSounds(conf, "EXP")) {
-
-                FancyFeaturesHandler.playSound(player, conf, "EXP");
-
-            }
+            double newEXP = ExperienceHandler.getPrettyDouble(exp);
+            giveEXP(player, newEXP, skill);
 
         }
 
@@ -516,15 +345,12 @@ public class ExperienceHandler {
 
     private static void addArtificerEXP (Player player, double exp) throws ObjectMappingException {
 
-        int conf = GeneralGetters.getConfigFromSkill("Artificer");
-        String skill = "Artificer";
-        double currentEXP = AccountsHandler.getCurrentEXP("Artificer", player);
         if (PixelSkills.isPixelBoostersLoaded) {
 
             List<String> skillBlacklist = com.lypaka.pixelboosters.Config.ConfigManager.getBoosterNode(14, "Skills-Blacklist").getList(TypeToken.of(String.class));
             if (ConfigGetters.isPersonalBoosterActive(player, "Skills") || ConfigGetters.isServerBoosterActive("Skills")) {
 
-                if (skillBlacklist.isEmpty() || !skillBlacklist.contains(skill)) {
+                if (skillBlacklist.isEmpty() || !skillBlacklist.contains("Artificer")) {
 
                     String[] mod = com.lypaka.pixelboosters.Config.ConfigManager.getBoosterNode(14, "Personal").getString().split(" ");
                     double modDouble = Double.parseDouble(mod[1]);
@@ -544,74 +370,19 @@ public class ExperienceHandler {
             }
 
         }
-        double newEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(currentEXP);
-        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Artificer", "EXP").setValue(ExperienceHandler.getPrettyDouble(newEXP));
-        String value;
-        if (newEXP != 1) {
-
-            value = "points";
-
-        } else {
-
-            value = "point";
-
-        }
-
-        if (GeneralGetters.areMessagesEnabled("Artificer", "EXP")) {
-
-            if (AccountsHandler.areMessagesEnabled(player, "Artificer")) {
-
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(11)
-                        .replace("points", value)
-                        .replace("%exp%", String.valueOf(exp))
-                        .replace("%skill%", "Artificer")
-                        .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                ));
-
-            }
-
-        }
-
-        AccountsHandler.clearCraftedQuantity(player);
-        if (FancyFeaturesGetters.showActionBar(conf, "EXP")) {
-
-            FancyFeaturesHandler.sendActionBar(player, conf, "EXP");
-
-        }
-        if (FancyFeaturesGetters.showBossBar(conf)) {
-
-            FancyFeaturesHandler.displayBar(player, skill);
-
-        }
-        if (FancyFeaturesGetters.sendTitleMessages(conf, "EXP")) {
-
-            FancyFeaturesHandler.sendTitle(player, conf, "EXP");
-
-        }
-        if (FancyFeaturesGetters.doEffects(conf, "EXP")) {
-
-            FancyFeaturesHandler.spawnParticles(player, conf, "EXP");
-
-        }
-        if (FancyFeaturesGetters.playSounds(conf, "EXP")) {
-
-            FancyFeaturesHandler.playSound(player, conf, "EXP");
-
-        }
+        double newEXP = ExperienceHandler.getPrettyDouble(exp);
+        giveEXP(player, getPrettyDouble(newEXP), "Artificer");
 
     }
 
     private static void addHarvesterEXP (Player player, double exp) throws ObjectMappingException {
 
-        int conf = GeneralGetters.getConfigFromSkill("Harvester");
-        String skill = "Harvester";
-        double currentEXP = ExperienceHandler.getPrettyDouble(AccountsHandler.getCurrentEXP("Harvester", player));
         if (PixelSkills.isPixelBoostersLoaded) {
 
             List<String> skillBlacklist = com.lypaka.pixelboosters.Config.ConfigManager.getBoosterNode(13, "Skills-Blacklist").getList(TypeToken.of(String.class));
             if (ConfigGetters.isPersonalBoosterActive(player, "Skills") || ConfigGetters.isServerBoosterActive("Skills")) {
 
-                if (skillBlacklist.isEmpty() || !skillBlacklist.contains(skill)) {
+                if (skillBlacklist.isEmpty() || !skillBlacklist.contains("Harvester")) {
 
                     String[] mod = com.lypaka.pixelboosters.Config.ConfigManager.getBoosterNode(13, "Modifier").getString().split(" ");
                     double modDouble = Double.parseDouble(mod[1]);
@@ -631,59 +402,9 @@ public class ExperienceHandler {
             }
 
         }
-        double newEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(currentEXP);
-        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", "Harvester", "EXP").setValue(ExperienceHandler.getPrettyDouble(newEXP));
-        String value;
-        if (newEXP != 1) {
 
-            value = "points";
-
-        } else {
-
-            value = "point";
-
-        }
-
-        if (GeneralGetters.areMessagesEnabled("Harvester", "EXP")) {
-
-            if (AccountsHandler.areMessagesEnabled(player, "Harvester")) {
-
-                player.sendMessage(FancyText.getFancyText(MessageGetters.getEXPGained(11)
-                        .replace("points", value)
-                        .replace("%exp%", String.valueOf(exp))
-                        .replace("%skill%", "Harvester")
-                        .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-                ));
-
-            }
-
-        }
-
-        if (FancyFeaturesGetters.showActionBar(conf, "EXP")) {
-
-            FancyFeaturesHandler.sendActionBar(player, conf, "EXP");
-
-        }
-        if (FancyFeaturesGetters.showBossBar(conf)) {
-
-            FancyFeaturesHandler.displayBar(player, skill);
-
-        }
-        if (FancyFeaturesGetters.sendTitleMessages(conf, "EXP")) {
-
-            FancyFeaturesHandler.sendTitle(player, conf, "EXP");
-
-        }
-        if (FancyFeaturesGetters.doEffects(conf, "EXP")) {
-
-            FancyFeaturesHandler.spawnParticles(player, conf, "EXP");
-
-        }
-        if (FancyFeaturesGetters.playSounds(conf, "EXP")) {
-
-            FancyFeaturesHandler.playSound(player, conf, "EXP");
-
-        }
+        double newEXP = ExperienceHandler.getPrettyDouble(exp);
+        giveEXP(player, getPrettyDouble(newEXP), "Harvester");
 
     }
 
@@ -715,59 +436,44 @@ public class ExperienceHandler {
 
     }
 
-    public static void levelUp (String skill, Player player) throws ObjectMappingException {
+    public static void levelUp (String skill, Player player, boolean forced) throws ObjectMappingException, IOException {
 
         String expMode = EXPGetters.getEXPMode(GeneralGetters.getConfigFromSkill(skill));
         int currentLvl = AccountsHandler.getLevel(skill, player);
+        int newLevel = currentLvl + 1;
         double currentEXP = AccountsHandler.getCurrentEXP(skill, player);
         int conf = GeneralGetters.getConfigFromSkill(skill);
 
-        // Increase player level by 1 and reset EXP
-        if (expMode.equals("calculated")) {
+        SkillLevelUpEvent event = new SkillLevelUpEvent(player, newLevel, skill);
+        MinecraftForge.EVENT_BUS.post(event);
+        if (!event.isCanceled()) {
 
-            if (currentEXP > AccountsHandler.getEXPToNextLvl(skill, player)) {
+            if (forced) {
 
-                if (currentLvl == 1) {
-
-                    newEXP = currentEXP - EXPGetters.getBaseEXP(GeneralGetters.getConfigFromSkill(skill));
-
-                } else {
-
-                    newEXP = currentEXP - AccountsHandler.getEXPToNextLvl(skill, player);
-
-                }
-
-                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
-
-            } else if (currentEXP == AccountsHandler.getEXPToNextLvl(skill, player)) {
-
-                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+                // This will only ever get called if the player is using a Skill Candy, so its safe to just get the optional here.
+                player.getItemInHand(HandTypes.MAIN_HAND).get().setQuantity(player.getItemInHand(HandTypes.MAIN_HAND).get().getQuantity() - 1);
+                player.sendMessage(Text.of(TextColors.AQUA, "You used 1 Skill Candy to level up your " + skill + " skill!"));
+                LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
+                RewardsHandler.triggerRewards(conf, player);
+                player.closeInventory();
 
             }
 
-        } else if (expMode.equals("fixed")) {
+            // Increase player level by 1 and reset EXP
+            if (expMode.equals("calculated")) {
 
-            // Add 1 from player level here to get level of EXP for level player would be leveling up to
+                if (currentEXP > AccountsHandler.getEXPToNextLvl(skill, player)) {
 
-            if (AccountsHandler.getLevel(skill, player) == 1) {
+                    if (currentLvl == 1) {
 
-                if (currentEXP > EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), 2)) {
+                        newEXP = currentEXP - EXPGetters.getBaseEXP(GeneralGetters.getConfigFromSkill(skill));
 
-                    double newEXP = currentEXP - EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), 2);
-                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
+                    } else {
 
-                } else if (currentEXP == EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), 2)) {
+                        newEXP = currentEXP - AccountsHandler.getEXPToNextLvl(skill, player);
 
-                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+                    }
 
-                }
-
-            } else {
-
-                if (currentEXP >= AccountsHandler.getEXPToNextLvl(skill, player)) {
-
-                    int checkLevel = AccountsHandler.getLevel(skill, player) + 1;
-                    double newEXP = currentEXP - EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), checkLevel);
                     ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
 
                 } else if (currentEXP == AccountsHandler.getEXPToNextLvl(skill, player)) {
@@ -776,56 +482,89 @@ public class ExperienceHandler {
 
                 }
 
+            } else if (expMode.equals("fixed")) {
+
+                // Add 1 from player level here to get level of EXP for level player would be leveling up to
+
+                if (AccountsHandler.getLevel(skill, player) == 1) {
+
+                    if (currentEXP > EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), 2)) {
+
+                        double newEXP = currentEXP - EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), 2);
+                        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
+
+                    } else if (currentEXP == EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), 2)) {
+
+                        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+
+                    }
+
+                } else {
+
+                    if (currentEXP >= AccountsHandler.getEXPToNextLvl(skill, player)) {
+
+                        int checkLevel = AccountsHandler.getLevel(skill, player) + 1;
+                        double newEXP = currentEXP - EXPGetters.getManualEXPAmount(GeneralGetters.getConfigFromSkill(skill), checkLevel);
+                        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
+
+                    } else if (currentEXP == AccountsHandler.getEXPToNextLvl(skill, player)) {
+
+                        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+
+                    }
+
+                }
+
             }
 
-        }
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Level").setValue(currentLvl + 1);
 
-        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Level").setValue(currentLvl + 1);
+            EXPGetters.setEXPToNextLevel(GeneralGetters.getConfigFromSkill(skill), player);
 
-        EXPGetters.setEXPToNextLevel(GeneralGetters.getConfigFromSkill(skill), player);
+            if (GeneralGetters.areMessagesEnabled(skill, "Level-Up")) {
 
-        if (GeneralGetters.areMessagesEnabled(skill, "Level-Up")) {
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getLvlUp(conf)
+                        .replace("%lvl%", String.valueOf(currentLvl + 1))
+                        .replace("%skill%", skill)
+                        .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
+                ));
 
-            player.sendMessage(FancyText.getFancyText(MessageGetters.getLvlUp(conf)
-                    .replace("%lvl%", String.valueOf(currentLvl + 1))
-                    .replace("%skill%", skill)
-                    .replace("%next-level%", String.valueOf(AccountsHandler.getEXPToNextLvl(skill, player)))
-            ));
+            }
 
-        }
+            if (FancyFeaturesGetters.showActionBar(conf, "Level-Up")) {
 
-        if (FancyFeaturesGetters.showActionBar(conf, "Level-Up")) {
+                FancyFeaturesHandler.sendActionBar(player, conf, "Level-Up");
 
-            FancyFeaturesHandler.sendActionBar(player, conf, "Level-Up");
+            }
+            if (FancyFeaturesGetters.sendTitleMessages(conf, "Level-Up")) {
 
-        }
-        if (FancyFeaturesGetters.sendTitleMessages(conf, "Level-Up")) {
+                FancyFeaturesHandler.sendTitle(player, conf, "Level-Up");
 
-            FancyFeaturesHandler.sendTitle(player, conf, "Level-Up");
+            }
+            if (FancyFeaturesGetters.doEffects(conf, "Level-Up")) {
 
-        }
-        if (FancyFeaturesGetters.doEffects(conf, "Level-Up")) {
+                FancyFeaturesHandler.spawnParticles(player, conf, "Level-Up");
 
-            FancyFeaturesHandler.spawnParticles(player, conf, "Level-Up");
+            }
+            if (FancyFeaturesGetters.playSounds(conf, "Level-Up")) {
 
-        }
-        if (FancyFeaturesGetters.playSounds(conf, "Level-Up")) {
+                FancyFeaturesHandler.playSound(player, conf, "Level-Up");
 
-            FancyFeaturesHandler.playSound(player, conf, "Level-Up");
+            }
 
-        }
+            // Resets the "triggered" boolean value for Perk triggers on level up back to "false".
+            JoinListener.generatePerkTriggers(player, skill);
 
-        // Resets the "triggered" boolean value for Perk triggers on level up back to "false".
-        JoinListener.generatePerkTriggers(player, skill);
+            endingLvl = currentLvl + 1;
 
-        endingLvl = currentLvl + 1;
+            // Checks for a double level up, which is unlikely but dependent upon how server owners configure their config files
+            if (didLevelUp(skill, player)) {
 
-        // Checks for a double level up, which is unlikely but dependent upon how server owners configure their config files
-        if (didLevelUp(skill, player)) {
+                if (AccountsHandler.getLevel(skill, player) < GeneralGetters.getMaxLevel(conf)) {
 
-            if (AccountsHandler.getLevel(skill, player) < GeneralGetters.getMaxLevel(conf)) {
+                    levelUp(skill, player, false);
 
-                levelUp(skill, player);
+                }
 
             }
 
@@ -838,6 +577,25 @@ public class ExperienceHandler {
         DecimalFormat df = new DecimalFormat("#.##");
         String formatted = df.format(value);
         return Double.parseDouble(formatted);
+
+    }
+
+    private static void giveEXP (Player player, double exp, String skill) throws ObjectMappingException {
+
+        SkillExperienceEvent event = new SkillExperienceEvent(player, exp, skill);
+        MinecraftForge.EVENT_BUS.post(event);
+        if (!event.isCanceled()) {
+
+            double setEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(AccountsHandler.getCurrentEXP(skill, player));
+            ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(ExperienceHandler.getPrettyDouble(setEXP));
+            MessageHandlers.sendEXPMessages(player, exp, skill);
+            if (skill.equalsIgnoreCase("Artificer")) {
+
+                AccountsHandler.clearCraftedQuantity(player);
+
+            }
+
+        }
 
     }
 
