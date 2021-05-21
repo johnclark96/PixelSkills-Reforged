@@ -230,7 +230,7 @@ public class ExperienceHandler {
 
             }
 
-            newEXP = ExperienceHandler.getPrettyDouble(useEXP) + ExperienceHandler.getPrettyDouble(currentEXP);
+            newEXP = ExperienceHandler.getPrettyDouble(useEXP);
             giveEXP(player, getPrettyDouble(newEXP), skill);
 
 
@@ -269,7 +269,7 @@ public class ExperienceHandler {
                     }
 
                 }
-                gainedEXP = ExperienceHandler.getPrettyDouble(modEXP) + ExperienceHandler.getPrettyDouble(currentEXP);
+                gainedEXP = ExperienceHandler.getPrettyDouble(modEXP);
 
             } else {
 
@@ -299,7 +299,7 @@ public class ExperienceHandler {
 
                 }
 
-                gainedEXP = ExperienceHandler.getPrettyDouble(exp) + ExperienceHandler.getPrettyDouble(currentEXP);
+                gainedEXP = ExperienceHandler.getPrettyDouble(exp);
 
             }
 
