@@ -11,7 +11,10 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
@@ -354,6 +357,38 @@ public class AdminCommand {
                 })
                 .build();
 
+        CommandSpec setUnbreakable = CommandSpec.builder()
+                .arguments(
+                        GenericArguments.player(Text.of("player"))
+                )
+                .executor((sender, context) -> {
+
+                    Player player = (Player) context.getOne("player").get();
+                    if (player.getItemInHand(HandTypes.MAIN_HAND).isPresent()) {
+
+                        ItemStack tool = player.getItemInHand(HandTypes.MAIN_HAND).get();
+                        if (tool.supports(Keys.ITEM_DURABILITY)) {
+
+                            tool.offer(Keys.UNBREAKABLE, true);
+                            player.sendMessage(Text.of("Your tool is now unbreakable!"));
+
+                        } else {
+
+                            sender.sendMessage(Text.of("Player's current tool does not support durability!"));
+
+                        }
+
+                    } else {
+
+                        sender.sendMessage(Text.of("Could not detect a tool in the player's hand!"));
+
+                    }
+
+                    return CommandResult.success();
+
+                })
+                .build();
+
         return CommandSpec.builder()
                 .child(checkLevel, "checklevel", "checklvl")
                 .child(levelUp, "lvlup", "levelup")
@@ -367,6 +402,7 @@ public class AdminCommand {
                 .child(toggle, "toggle")
                 .child(msgToggle, "msgtoggle")
                 .child(giveCandy, "give")
+                .child(setUnbreakable, "setunbreakable")
                 .permission("pixelskills.command.admin")
                 .executor((sender, context) -> {return CommandResult.success();}).build();
 

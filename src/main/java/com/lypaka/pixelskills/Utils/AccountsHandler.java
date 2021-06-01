@@ -19,8 +19,6 @@ public class AccountsHandler {
     public static boolean areMessagesEnabled (Player player, String skill) throws ObjectMappingException {
 
         Map<String, Boolean> toggleMap = ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account-Settings", "EXP-Messages").getValue(new TypeToken<Map<String, Boolean>>() {});
-        System.out.println(skill);
-        System.out.println(toggleMap);
         return toggleMap.get(skill);
 
     }
