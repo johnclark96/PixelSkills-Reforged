@@ -4,19 +4,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.reflect.TypeToken;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
-import com.lypaka.pixelskills.PerkHandlers.GladiatorPerks;
 import com.lypaka.pixelskills.Utils.ExperienceHandler;
+import com.lypaka.pixelskills.Utils.PerkHandler;
 import com.pixelmonmod.pixelmon.api.events.BeatTrainerEvent;
 import com.pixelmonmod.pixelmon.api.events.BeatWildPixelmonEvent;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleEndEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.api.pokemon.PokemonBase;
-import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import com.pixelmonmod.pixelmon.entities.pixelmon.stats.links.PokemonLink;
 import com.pixelmonmod.pixelmon.enums.EnumBossMode;
 import com.pixelmonmod.pixelmon.enums.battle.BattleResults;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -63,7 +60,7 @@ public class Gladiator {
 
                     if (perkTriggered) {
 
-                        event.trainer.winMoney = GladiatorPerks.modifiedMoney;
+                        event.trainer.winMoney = PerkHandler.modifiedMoney;
                         perkTriggered = false;
 
                     }

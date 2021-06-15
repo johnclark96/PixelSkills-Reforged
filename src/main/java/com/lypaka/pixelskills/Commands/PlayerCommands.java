@@ -6,6 +6,7 @@ import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.TaskGetters;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.pixelmonmod.pixelmon.Pixelmon;
+import com.pixelmonmod.pixelmon.comm.packetHandlers.OpenScreen;
 import com.pixelmonmod.pixelmon.comm.packetHandlers.npc.SetNPCData;
 import com.pixelmonmod.pixelmon.entities.npcs.NPCChatting;
 import com.pixelmonmod.pixelmon.enums.EnumGuiScreen;
@@ -54,7 +55,8 @@ public class PlayerCommands {
                                 npc.setName(name);
                                 EntityPlayerMP fP = (EntityPlayerMP) player;
                                 Pixelmon.network.sendTo(new SetNPCData(name, desc), fP);
-                                fP.openGui(Pixelmon.instance, EnumGuiScreen.NPCChat.getIndex(), fP.world, npc.getId(), 0, 0);
+                                //fP.openGui(Pixelmon.instance, EnumGuiScreen.NPCChat.getIndex(), fP.world, npc.getId(), 0, 0);
+                                OpenScreen.open(fP, EnumGuiScreen.Dialogue, EnumGuiScreen.NPCChat.getIndex());
 
                             } else {
 

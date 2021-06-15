@@ -4,9 +4,11 @@ import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.LevelLockedRewardGetters;
 import com.lypaka.pixelskills.Config.Getters.RewardGetters;
+import net.minecraft.item.Item;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,11 +18,12 @@ import java.util.Random;
 
 public class RewardsHandler {
 
+    private static ItemStack stack;
+
     public static void triggerRewards (int folder, Player player) throws ObjectMappingException, IOException {
 
         // Check if rewards are enabled for the provided skill
         String skill = GeneralGetters.getSkillFromConfigNumber(folder);
-
         if (RewardGetters.rewardsEnabled(folder)) {
 
             // Check if player's current level is a reward level
@@ -47,8 +50,7 @@ public class RewardsHandler {
             if (RewardGetters.getActivationLevel(folder) == level) {
 
                 // Run chance code
-                Random random = new Random();
-                double rng = random.nextDouble();
+                double rng = new Random().nextDouble();
 
                 // Player is on Reward activation level, so "next reward level" is not set yet, so use default chance
                 double chance = RewardGetters.getDefaultRewardChance(folder);
@@ -101,8 +103,7 @@ public class RewardsHandler {
             } else if (AccountsHandler.getNextRewardLevel(folder, player) == level) {
 
                 // Run chance code
-                Random random = new Random();
-                double rng = random.nextDouble();
+                double rng = new Random().nextDouble();
                 double chance = 0;
                 String mode = RewardGetters.getRewardMode(folder);
 
@@ -173,31 +174,21 @@ public class RewardsHandler {
         String skill = GeneralGetters.getSkillFromConfigNumber(folder);
         Map<String, String> map = RewardGetters.getRewardMap(folder, rewardNum);
         int amount = Integer.parseInt(map.get("Amount"));
-        String[] modifier = map.get("Modifier").split(" ");
+        String modifierString = map.get("Modifier");
+        double modifier = ModifierHandler.eval(modifierString.replace("%player-level%", String.valueOf(AccountsHandler.getLevel(skill, player))));
         String prizeType = map.get("Prize-Type").toLowerCase();
         String prize = map.get("Prize");
-        String function = modifier[0];
-        double modNum;
+        String function = map.get("Function");
         double result = 0;
-
-        if (modifier[1].equalsIgnoreCase("%player-level%")) {
-
-            modNum = AccountsHandler.getLevel(skill, player);
-
-        } else {
-
-            modNum = Double.parseDouble(modifier[1]);
-
-        }
 
         switch (function) {
 
             case "add":
-                result = amount + modNum;
+                result = amount + modifier;
                 break;
 
             case "multiply":
-                result = amount * modNum;
+                result = amount * modifier;
                 break;
 
         }
@@ -211,7 +202,12 @@ public class RewardsHandler {
 
                     for (String prz : prizes) {
 
-                        Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
+                        //Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
+                        stack = ItemStack.builder()
+                                .fromItemStack((ItemStack) (Object) (new net.minecraft.item.ItemStack(Item.getByNameOrId(prz))))
+                                .quantity((int) result)
+                                .build();
+                        player.getInventory().offer(stack);
                         player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)
                                 .replace("%number%", String.valueOf((int) result))
                                 .replace("%prize%", prz)
@@ -221,7 +217,12 @@ public class RewardsHandler {
 
                 } else {
 
-                    Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
+                    //Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
+                    stack = ItemStack.builder()
+                            .fromItemStack((ItemStack) (Object) (new net.minecraft.item.ItemStack(Item.getByNameOrId(prize))))
+                            .quantity((int) result)
+                            .build();
+                    player.getInventory().offer(stack);
                     player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)
                             .replace("%number%", String.valueOf((int) result))
                             .replace("%prize%", prize)
@@ -273,12 +274,7 @@ public class RewardsHandler {
 
                 }
 
-                if (!MessageHandlers.getRewardMessage(folder, rewardNum).equalsIgnoreCase("none")) {
-
-                    player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)));
-
-                }
-
+                player.sendMessage(FancyText.getFancyText(MessageHandlers.getRewardMessage(folder, rewardNum)));
                 break;
 
         }

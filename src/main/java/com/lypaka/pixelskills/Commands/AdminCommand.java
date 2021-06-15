@@ -34,19 +34,9 @@ public class AdminCommand {
 
                     Player player = (Player) context.getOne("player").get();
                     String skill = getPrettySkillName(context.getOne("skill").get().toString().toLowerCase());
-                    if (PerkGetters.getChanceValue(GeneralGetters.getConfigFromSkill(skill)).equalsIgnoreCase("integer")) {
-
-                        int value = Integer.parseInt(context.getOne("chance").get().toString());
-                        AccountsHandler.setNextPerkChanceManual(GeneralGetters.getConfigFromSkill(skill), player, value);
-                        sender.sendMessage(Text.of(TextColors.GREEN, "Successfully set " + player.getName() + "'s chance value to " + value + "!"));
-
-                    } else {
-
-                        double value = Double.parseDouble(context.getOne("skill").get().toString());
-                        AccountsHandler.setNextPerkChanceManual(GeneralGetters.getConfigFromSkill(skill), player, value);
-                        sender.sendMessage(Text.of(TextColors.GREEN, "Successfully set " + player.getName() + "'s chance value to " + value + "!"));
-
-                    }
+                    double value = Double.parseDouble(context.getOne("chance").get().toString());
+                    AccountsHandler.setNextPerkChanceManual(GeneralGetters.getConfigFromSkill(skill), player, value);
+                    sender.sendMessage(Text.of(TextColors.GREEN, "Successfully set " + player.getName() + "'s chance value to " + value + "!"));
 
                     return CommandResult.success();
 

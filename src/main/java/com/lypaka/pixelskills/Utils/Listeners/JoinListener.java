@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.EXPGetters;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
-import com.lypaka.pixelskills.PixelSkills;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.pixelmonmod.pixelmon.api.pokemon.PokemonSpec;
 import com.pixelmonmod.pixelmon.enums.EnumSpecies;

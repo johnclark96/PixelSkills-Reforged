@@ -4,9 +4,11 @@ import com.google.common.reflect.TypeToken;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Config.Getters.LevelLockedRewardGetters;
+import net.minecraft.item.Item;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.List;
@@ -77,33 +79,21 @@ public class LevelLockedRewardsHandler {
 
         Map<String, String> map = LevelLockedRewardGetters.getRewardMap(folder, rewardNum, option);
         int amount = Integer.parseInt(map.get("Amount"));
-        String[] modifier = map.get("Modifier").split(" ");
+        String modifierString = map.get("Modifier");
+        double modifier = ModifierHandler.eval(modifierString.replace("%player-level%", String.valueOf(AccountsHandler.getLevel(skill, player))));
         String prizeType = map.get("Prize-Type").toLowerCase();
         String prize = map.get("Prize");
-        String function = modifier[0];
-        double modNum;
+        String function = map.get("Function");
         double result = 0;
-
-
-
-        if (modifier[1].equalsIgnoreCase("%player-level%")) {
-
-            modNum = AccountsHandler.getLevel(skill, player);
-
-        } else {
-
-            modNum = Double.parseDouble(modifier[1]);
-
-        }
 
         switch (function) {
 
             case "add":
-                result = amount + modNum;
+                result = amount + modifier;
                 break;
 
             case "multiply":
-                result = amount * modNum;
+                result = amount * modifier;
                 break;
 
         }
@@ -111,13 +101,18 @@ public class LevelLockedRewardsHandler {
         switch (prizeType) {
 
             case "item":
+                ItemStack stack;
                 if (prize.contains(", ")) {
 
                     String[] prizes = prize.split(", ");
 
                     for (String prz : prizes) {
 
-                        Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prz + " " + (int) result);
+                        stack = ItemStack.builder()
+                                .fromItemStack((ItemStack) (Object) new net.minecraft.item.ItemStack(Item.getByNameOrId(prz)))
+                                .build();
+                        stack.setQuantity((int)result);
+                        player.getInventory().offer(stack);
                         player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)
                                 .replace("%number%", String.valueOf(result))
                                 .replace("%prize%", prz)
@@ -127,7 +122,11 @@ public class LevelLockedRewardsHandler {
 
                 } else {
 
-                    Sponge.getCommandManager().process(Sponge.getServer().getConsole(), "give " + player.getName() + " " + prize + " " + (int) result);
+                    stack = ItemStack.builder()
+                            .fromItemStack((ItemStack) (Object) new net.minecraft.item.ItemStack(Item.getByNameOrId(prize)))
+                            .build();
+                    stack.setQuantity((int)result);
+                    player.getInventory().offer(stack);
                     player.sendMessage(FancyText.getFancyText(MessageHandlers.getLLRewardMessage(folder, rewardNum, option)
                             .replace("%number%", String.valueOf(result))
                             .replace("%prize%", prize)

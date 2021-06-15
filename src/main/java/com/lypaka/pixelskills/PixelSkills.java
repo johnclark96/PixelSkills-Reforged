@@ -5,7 +5,6 @@ import com.lypaka.pixelskills.Commands.AdminCommand;
 import com.lypaka.pixelskills.Commands.PlayerCommands;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.GUIs.SkillInfoPage;
-import com.lypaka.pixelskills.PerkHandlers.HarvesterPerks;
 import com.lypaka.pixelskills.Skills.*;
 import com.lypaka.pixelskills.Utils.Listeners.CandyUseListener;
 import com.lypaka.pixelskills.Utils.Listeners.JoinListener;
@@ -65,9 +64,6 @@ public class PixelSkills {
         ConfigManager.setup(configDir);
         registerSkillEvents();
         registerUtilEvents();
-
-        // Adds the tool types to the list for the Harvester perk
-        HarvesterPerks.setList();
 
         // Loads the plugin's commands
         registerCommands();

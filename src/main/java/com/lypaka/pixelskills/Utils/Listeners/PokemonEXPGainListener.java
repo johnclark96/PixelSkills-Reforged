@@ -1,12 +1,10 @@
 package com.lypaka.pixelskills.Utils.Listeners;
 
-import com.lypaka.pixelskills.PerkHandlers.ConquerorPerks;
-import com.lypaka.pixelskills.PerkHandlers.GladiatorPerks;
 import com.lypaka.pixelskills.Skills.Conqueror;
 import com.lypaka.pixelskills.Skills.Gladiator;
+import com.lypaka.pixelskills.Utils.PerkHandler;
 import com.pixelmonmod.pixelmon.api.events.ExperienceGainEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -26,9 +24,9 @@ public class PokemonEXPGainListener {
 
                     if (Conqueror.perkTriggered) {
 
-                        event.setExperience(ConquerorPerks.modifiedEXP);
+                        event.setExperience(PerkHandler.modifiedEXP);
                         Conqueror.perkTriggered = false;
-                        ConquerorPerks.modifiedEXP = 0;
+                        PerkHandler.modifiedEXP = 0;
 
                     }
 
@@ -42,7 +40,7 @@ public class PokemonEXPGainListener {
 
                 if (Gladiator.perkTriggered) {
 
-                    event.setExperience(GladiatorPerks.modifiedEXP);
+                    event.setExperience(PerkHandler.modifiedEXP);
                     Gladiator.perkTriggered = false;
 
                 }

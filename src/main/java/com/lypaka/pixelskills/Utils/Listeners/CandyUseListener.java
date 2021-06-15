@@ -1,9 +1,7 @@
 package com.lypaka.pixelskills.Utils.Listeners;
 
 import com.lypaka.pixelskills.GUIs.CandyPage;
-import com.pixelmonmod.pixelmon.api.events.RareCandyEvent;
 import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;

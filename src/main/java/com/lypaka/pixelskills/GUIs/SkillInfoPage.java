@@ -2,18 +2,13 @@ package com.lypaka.pixelskills.GUIs;
 
 import com.codehusky.huskyui.StateContainer;
 import com.codehusky.huskyui.states.Page;
-import com.codehusky.huskyui.states.action.ActionType;
-import com.codehusky.huskyui.states.action.runnable.RunnableAction;
-import com.codehusky.huskyui.states.element.ActionableElement;
 import com.codehusky.huskyui.states.element.Element;
-import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.lypaka.pixelskills.Commands.AdminCommand;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.FancyText;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NBTTagCompound;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
@@ -21,7 +16,6 @@ import org.spongepowered.api.item.inventory.InventoryArchetypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 
 import java.util.ArrayList;
 import java.util.List;

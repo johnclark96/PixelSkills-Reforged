@@ -39,16 +39,7 @@ public class PerkGetters {
 
     public static double getDefaultPerkChance (int folder) {
 
-        String value = getChanceValue(folder);
-        if (value.equalsIgnoreCase("integer")) {
-
-            return ConfigManager.getConfigNode(folder, 2, "General-Settings", "Chance-To-Trigger").getInt();
-
-        } else {
-
-            return ConfigManager.getConfigNode(folder, 2, "General-Settings", "Chance-To-Trigger").getDouble();
-
-        }
+        return ConfigManager.getConfigNode(folder, 2, "General-Settings", "Chance-To-Trigger").getDouble();
 
     }
 
@@ -141,12 +132,6 @@ public class PerkGetters {
         }
 
         return map;
-
-    }
-
-    public static String getChanceValue (int folder) {
-
-        return ConfigManager.getConfigNode(folder, 2, "General-Settings", "Chance-Value").getString();
 
     }
 

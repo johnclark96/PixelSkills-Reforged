@@ -1,7 +1,6 @@
 package com.lypaka.pixelskills.Skills;
 
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.entities.pixelmon.EntityPixelmon;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class Conqueror {

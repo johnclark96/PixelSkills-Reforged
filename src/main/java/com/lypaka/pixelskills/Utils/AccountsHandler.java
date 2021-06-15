@@ -94,9 +94,9 @@ public class AccountsHandler {
 
     }
 
-    public static int getPerkChance (String skill, Player player) {
+    public static double getPerkChance (String skill, Player player) {
 
-        return ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Perk-Chance").getInt();
+        return ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Perk-Chance").getDouble();
 
     }
 
@@ -126,67 +126,34 @@ public class AccountsHandler {
 
             if (PerkGetters.chanceIncreases(conf)) {
 
-                if (PerkGetters.getChanceValue(conf).equalsIgnoreCase("integer")) {
+                double baseChance = PerkGetters.getDefaultPerkChance(conf);
+                String[] modifier = PerkGetters.getModifier(conf).split(" ");
+                double mod;
+                if (modifier[1].equalsIgnoreCase("%player-level%")) {
 
-                    double baseChance = PerkGetters.getDefaultPerkChance(conf);
-                    String[] modifier = PerkGetters.getModifier(conf).split(" ");
-                    int mod;
-                    if (modifier[1].equalsIgnoreCase("%player-level%")) {
-
-                        mod = getLevel(GeneralGetters.getSkillFromConfigNumber(conf), player);
-
-                    } else {
-
-                        mod = Integer.parseInt(modifier[1]);
-
-                    }
-                    String function = modifier[0];
-                    int result = 0;
-                    switch (function) {
-
-                        case "add":
-                            result = (int) (baseChance + mod);
-                            break;
-
-                        case "multiply":
-                            result = (int) (baseChance * mod);
-                            break;
-
-                    }
-
-                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", GeneralGetters.getSkillFromConfigNumber(conf), "Perk-Chance").setValue(result);
+                    mod = getLevel(GeneralGetters.getSkillFromConfigNumber(conf), player);
 
                 } else {
 
-                    double baseChance = PerkGetters.getDefaultPerkChance(conf);
-                    String[] modifier = PerkGetters.getModifier(conf).split(" ");
-                    double mod;
-                    if (modifier[1].equalsIgnoreCase("%player-level%")) {
-
-                        mod = getLevel(GeneralGetters.getSkillFromConfigNumber(conf), player);
-
-                    } else {
-
-                        mod = Integer.parseInt(modifier[1]);
-
-                    }
-                    String function = modifier[0];
-                    double result = 0;
-                    switch (function) {
-
-                        case "add":
-                            result = baseChance + mod;
-                            break;
-
-                        case "multiply":
-                            result = baseChance * mod;
-                            break;
-
-                    }
-
-                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", GeneralGetters.getSkillFromConfigNumber(conf), "Perk-Chance").setValue(result);
+                    mod = Integer.parseInt(modifier[1]);
 
                 }
+                String function = modifier[0];
+                double result = 0;
+                switch (function) {
+
+                    case "add":
+                        result = baseChance + mod;
+                        break;
+
+                    case "multiply":
+                        result = baseChance * mod;
+                        break;
+
+
+                }
+
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", GeneralGetters.getSkillFromConfigNumber(conf), "Perk-Chance").setValue(result);
 
             } else {
 
