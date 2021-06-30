@@ -211,7 +211,7 @@ public class AccountsHandler {
 
     public static void setEXP (String skill, double exp, Player player) {
 
-        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP-To-Next-Level").setValue(exp);
+        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(exp);
 
     }
 

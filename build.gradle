@@ -8,15 +8,20 @@ buildscript {
         maven {
             url = "https://plugins.gradle.org/m2/"
         }
+        maven {
+            url = "https://mvnrepository.com/artifact/net.objecthunter/exp4j"
+        }
     }
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
         classpath "gradle.plugin.org.spongepowered:spongegradle:0.8.1"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "org.spongepowered.plugin"
+apply plugin: 'com.github.johnrengelman.shadow'
 
 version = modVersion
 group = modGroup
@@ -45,9 +50,25 @@ repositories {
 
 dependencies {
     compile 'org.spongepowered:spongeapi:7.3.0-SNAPSHOT'
-    compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Desktop\\Plugins\\LIBRARIES', include: ['Reforged.jar'])
-    compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Desktop\\Plugins\\LIBRARIES', include: ['PixelBoosters-Reforged.jar'])
+    compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Documents\\GitHub\\LIBRARIES', include: ['Reforged.jar'])
+    compileOnly fileTree(dir: 'C:\\Users\\Ryan\\Documents\\GitHub\\LIBRARIES', include: ['PixelBoosters-Reforged.jar'])
     compile 'com.github.codehusky:HuskyUI-Plugin:v0.6.0-PRE4'
+    //implementation group: 'net.objecthunter', name: 'exp4j', version: '0.4.4'
+    compile 'net.objecthunter:exp4j:0.4.4'
+}
+
+shadowJar {
+    dependencies {
+        include(dependency('net.objecthunter:exp4j:0.4.4'))
+    }
+
+    classifier = ""
+}
+
+reobf {
+    shadowJar {
+        mappingType = 'SEARGE'
+    }
 }
 
 processResources {

@@ -46,7 +46,7 @@ public class ExperienceHandler {
             startingLvl = AccountsHandler.getLevel(skill, player);
             if (didLevelUp(skill, player)) {
 
-                levelUp(skill, player, false);
+                levelUp(skill, player, false, false);
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
 
@@ -105,7 +105,7 @@ public class ExperienceHandler {
             startingLvl = AccountsHandler.getLevel("Artificer", player);
             if (didLevelUp("Artificer", player)) {
 
-                levelUp("Artificer", player, false);
+                levelUp("Artificer", player, false, false);
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
 
@@ -158,7 +158,7 @@ public class ExperienceHandler {
             startingLvl = AccountsHandler.getLevel("Harvester", player);
             if (didLevelUp("Harvester", player)) {
 
-                levelUp("Harvester", player, false);
+                levelUp("Harvester", player, false, false);
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
 
@@ -413,6 +413,7 @@ public class ExperienceHandler {
         String expMode = EXPGetters.getEXPMode(GeneralGetters.getConfigFromSkill(skill));
 
         if (expMode.equals("calculated")) {
+
             if (ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "Level").getInt() == 1) {
 
                 return ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").getDouble() >= EXPGetters.getBaseEXP(GeneralGetters.getConfigFromSkill(skill));
@@ -436,7 +437,7 @@ public class ExperienceHandler {
 
     }
 
-    public static void levelUp (String skill, Player player, boolean forced) throws ObjectMappingException, IOException {
+    public static void levelUp (String skill, Player player, boolean forced, boolean candy) throws ObjectMappingException, IOException {
 
         String expMode = EXPGetters.getEXPMode(GeneralGetters.getConfigFromSkill(skill));
         int currentLvl = AccountsHandler.getLevel(skill, player);
@@ -452,7 +453,11 @@ public class ExperienceHandler {
 
                 // This will only ever get called if the player is using a Skill Candy, so its safe to just get the optional here.
                 player.getItemInHand(HandTypes.MAIN_HAND).get().setQuantity(player.getItemInHand(HandTypes.MAIN_HAND).get().getQuantity() - 1);
-                player.sendMessage(Text.of(TextColors.AQUA, "You used 1 Skill Candy to level up your " + skill + " skill!"));
+                if (candy) {
+
+                    player.sendMessage(Text.of(TextColors.AQUA, "You used 1 Skill Candy to level up your " + skill + " skill!"));
+
+                }
                 LevelLockedRewardsHandler.triggerLevelLockedRewards(conf, player);
                 RewardsHandler.triggerRewards(conf, player);
                 player.closeInventory();
@@ -480,6 +485,10 @@ public class ExperienceHandler {
 
                     ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
 
+                } else {
+
+                    ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+
                 }
 
             } else if (expMode.equals("fixed")) {
@@ -497,6 +506,10 @@ public class ExperienceHandler {
 
                         ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
 
+                    } else {
+
+                        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+
                     }
 
                 } else {
@@ -508,6 +521,10 @@ public class ExperienceHandler {
                         ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(newEXP);
 
                     } else if (currentEXP == AccountsHandler.getEXPToNextLvl(skill, player)) {
+
+                        ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
+
+                    } else {
 
                         ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP").setValue(0);
 
@@ -557,12 +574,17 @@ public class ExperienceHandler {
 
             endingLvl = currentLvl + 1;
 
+            // Remove if causes problem
+            ConfigManager.savePlayer(player.getUniqueId());
+
+            newEXP = 0;
+
             // Checks for a double level up, which is unlikely but dependent upon how server owners configure their config files
             if (didLevelUp(skill, player)) {
 
                 if (AccountsHandler.getLevel(skill, player) < GeneralGetters.getMaxLevel(conf)) {
 
-                    levelUp(skill, player, false);
+                    levelUp(skill, player, false, false);
 
                 }
 

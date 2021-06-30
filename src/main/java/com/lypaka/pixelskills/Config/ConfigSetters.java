@@ -473,12 +473,18 @@ public class ConfigSetters {
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Mining-Fossils", "Function").setValue("add");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Mining-Fossils", "Modifier").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Mining-Fossils", "Send-Message").setValue("You found %number% more fossils grouped together with that one!");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Function").setValue("add");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Send-Message").setValue("That looks like a strong Pokemon!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Reviving-Fossils", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -566,6 +572,7 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Hatching-Eggs", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Hatching-Eggs", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Hatching-Eggs", "Modifier").setValue("%player-level%");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Hatching-Eggs", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
@@ -575,6 +582,11 @@ public class ConfigSetters {
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Making-Eggs", "Send-Message").setValue("This egg has a rare power inside it!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Hatching-Eggs", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Hatching-Eggs", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -599,14 +611,17 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Send-Message").setValue("That looks like a very strong Pokemon!");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Normal-Pokemon", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Normal-Pokemon", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Normal-Pokemon", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Normal-Pokemon", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Normal-Pokemon", "Send-Message").setValue("That looks like a very strong Pokemon!");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Shiny-Pokemon", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Shiny-Pokemon", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Shiny-Pokemon", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Shiny-Pokemon", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
@@ -618,6 +633,13 @@ public class ConfigSetters {
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
 
                 }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Legendary-Pokemon", "Amount").setValue("1");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Normal-Pokemon", "Amount").setValue("1");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catching-Shiny-Pokemon", "Amount").setValue("1");
+
+                }
                 ConfigManager.saveSkill(folder, 2);
                 break;
 
@@ -625,14 +647,22 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Mega-Bosses", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Mega-Bosses", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Mega-Bosses", "Modifier").setValue("1.5");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Mega-Bosses", "Send-Message").setValue("Your Pokemon grew a little stronger from the harsh battle!");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Normal-Bosses", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Normal-Bosses", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Normal-Bosses", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Normal-Bosses", "Send-Message").setValue("Your Pokemon grew a little stronger from the harsh battle!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Mega-Bosses", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Mega-Bosses", "Amount").setValue("1");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Kill-Normal-Bosses", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -642,12 +672,18 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Send-Message").setValue("That Pokemon gained some more muscle from the evolution!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -657,12 +693,18 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier").setValue("1.2");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modify-Stats").setValue("hp, atk, def, satk, sdef, spd");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Send-Message").setValue("That is one powerful looking fish!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").setValue(1);
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -672,15 +714,23 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-NPC-Trainers", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-NPC-Trainers", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-NPC-Trainers", "Modifier").setValue("1.8");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-NPC-Trainers", "Send-Message").setValue("The Trainer was so impressed with your Pokemon they gave you extra money!");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-Wild-Pokemon", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-Wild-Pokemon", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-Wild-Pokemon", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-Wild-Pokemon", "Send-Message").setValue("Your Pokemon grew a little more than it normally does from that battle!");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "NPC-Blacklist").setValue(list);
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-NPC-Trainers", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-NPC-Trainers", "Amount").setValue("1");
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Defeating-Wild-Pokemon", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -716,12 +766,19 @@ public class ConfigSetters {
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Item-List").setValue(list);
                     list.remove("ExecuteConsoleCommand-give %player% minecraft:air 1");
                     list.remove("ExecuteConsoleCommand-give %player% pixelmon:poke_ball %num%");
-                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Amount-Given-From-List").setValue(1);
+//                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Amount-Given-From-List").setValue(1);
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Amount").setValue(1);
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Function").setValue("add");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Modifier").setValue("%player-level%");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Send-Message").setValue("There were extra items in the chest!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (!ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Amount-Given-From-List").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Amount-Given-From-List").setValue(null);
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier", "Amount").setValue(1);
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -731,6 +788,7 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Function").setValue("add");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Modifier").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Send-Message").setValue("You've got a firm understanding of how to catch this Pokemon!");
@@ -739,6 +797,11 @@ public class ConfigSetters {
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Settings", "Photographing-Player-Pokemon-Gives-EXP").setValue(false);
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Catch-Rate-Modifier", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);
@@ -760,11 +823,17 @@ public class ConfigSetters {
 
                 if (ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").isVirtual()) {
 
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").setValue("1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Function").setValue("multiply");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Modifier").setValue("1.1");
                     ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Send-Message").setValue("This Pokemon seems very friendly!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setComment("Don't touch this: doing so could wipe your settings!");
                     ConfigManager.getConfigNode(folder, 2, "General-Settings", "Node-Generated").setValue(true);
+
+                }
+                if (ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").isVirtual()) {
+
+                    ConfigManager.getConfigNode(folder, 2, "Perk-Setting-Modifiers", "Amount").setValue("1");
 
                 }
                 ConfigManager.saveSkill(folder, 2);

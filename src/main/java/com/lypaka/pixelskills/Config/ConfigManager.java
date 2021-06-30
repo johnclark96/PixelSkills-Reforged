@@ -29,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 public class ConfigManager {
 
     /** Name of the file to grab configuration settings from. */
-    private static final String[] BASE_FILES = {"gui-settings.conf"};
+    private static final String[] BASE_FILES = {"gui-settings.conf", "global-settings.conf"};
     private static final String[] FILE_NAMES = {"settings.conf", "exp.conf", "perks.conf", "rewards.conf", "level-locked-rewards.conf", "descriptions.conf", "fancy-features.conf"};
     private static final String[] FOLDER_NAMES = {"Archaeologist", "Artificer", "Barterer", "Botanist", "Breeder", "Caregiver", "Collector", "Conqueror", "Darwinist", "Fisherman", "Gladiator", "Harvester", "Looter", "Photographer", "Teacher", "Trader"};
     //                                                 0               1            2           3           4          5             6           7             8            9           10            11          12        13              14        15

@@ -7,6 +7,7 @@ import com.pixelmonmod.pixelmon.api.events.BerryEvent;
 import com.pixelmonmod.pixelmon.blocks.tileEntities.TileEntityApricornTree;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.io.IOException;
@@ -19,18 +20,16 @@ public class Botanist {
     @SubscribeEvent
     public void onApricornPick (ApricornEvent.PickApricorn event) throws IOException, ObjectMappingException {
 
-        if (event.isCanceled()) {
+        if (event.isCanceled()) return;
 
-            return;
-
-        }
+        if (!Sponge.getServer().getPlayer(event.player.getName()).isPresent()) return;
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
             if (GeneralGetters.isTaskEnabled(3, "Picking-Apricorns")) {
-                
+
                 Player player = (Player) event.player;
-                
+
                 if (GeneralGetters.getSkillPerm(3).equals("none") || player.hasPermission(GeneralGetters.getSkillPerm(3))) {
 
                     String type = event.apricorn.toString().toLowerCase();
@@ -38,7 +37,7 @@ public class Botanist {
                     ExperienceHandler.didTask(3, "Picking-Apricorns", player);
 
                 }
-                
+
             }
             
         }
@@ -48,11 +47,9 @@ public class Botanist {
     @SubscribeEvent
     public void onApricornPlant (ApricornEvent.ApricornPlanted event) throws IOException, ObjectMappingException {
 
-        if (event.isCanceled()) {
+        if (event.isCanceled()) return;
 
-            return;
-
-        }
+        if (!Sponge.getServer().getPlayer(event.player.getName()).isPresent()) return;
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -77,11 +74,9 @@ public class Botanist {
     @SubscribeEvent
     public void onBerryPick (BerryEvent.PickBerry event) throws IOException, ObjectMappingException {
 
-        if (event.isCanceled()) {
+        if (event.isCanceled()) return;
 
-            return;
-
-        }
+        if (!Sponge.getServer().getPlayer(event.player.getName()).isPresent()) return;
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -106,11 +101,9 @@ public class Botanist {
     @SubscribeEvent
     public void onBerryPlant (BerryEvent.BerryPlanted event) throws IOException, ObjectMappingException {
 
-        if (event.isCanceled()) {
+        if (event.isCanceled()) return;
 
-            return;
-
-        }
+        if (!Sponge.getServer().getPlayer(event.player.getName()).isPresent()) return;
         
         if (GeneralGetters.isSkillEnabled(3)) {
             
@@ -135,11 +128,9 @@ public class Botanist {
     @SubscribeEvent
     public void onApricornWater (ApricornEvent.ApricornWatered event) throws IOException, ObjectMappingException {
 
-        if (event.isCanceled()) {
+        if (event.isCanceled()) return;
 
-            return;
-
-        }
+        if (!Sponge.getServer().getPlayer(event.player.getName()).isPresent()) return;
         
         if (GeneralGetters.isSkillEnabled(3)) {
             

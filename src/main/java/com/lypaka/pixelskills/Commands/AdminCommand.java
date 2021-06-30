@@ -71,7 +71,26 @@ public class AdminCommand {
                     Player player = (Player) context.getOne("player").get();
                     String skill = getPrettySkillName(context.getOne("skill").get().toString().toLowerCase());
                     int level = (int) context.getOne("level").get();
-                    AccountsHandler.setLevel(skill, player, level);
+                    int currentLevel = AccountsHandler.getLevel(skill, player);
+                    int difference = level - currentLevel;
+                    for (int i = 0; i < difference; i++) {
+
+                        try {
+
+                            ExperienceHandler.levelUp(skill, player, true, false);
+
+                        } catch (ObjectMappingException e) {
+
+                            e.printStackTrace();
+
+                        } catch (IOException e) {
+
+                            e.printStackTrace();
+
+                        }
+
+                    }
+                    //AccountsHandler.setLevel(skill, player, level);
                     ConfigManager.savePlayer(player.getUniqueId());
                     sender.sendMessage(Text.of(TextColors.GREEN, "Successfully set " + player.getName() + "'s level in " + skill + " to " + level + "."));
 
@@ -161,7 +180,7 @@ public class AdminCommand {
 
                         if (ExperienceHandler.didLevelUp(skill, player)) {
 
-                            ExperienceHandler.levelUp(skill, player, false);
+                            ExperienceHandler.levelUp(skill, player, false, false);
 
                         }
 
@@ -188,7 +207,20 @@ public class AdminCommand {
                     Player player = (Player) context.getOne("player").get();
                     String skill = getPrettySkillName(context.getOne("skill").get().toString().toLowerCase());
                     int level = AccountsHandler.getLevel(skill, player) + 1;
-                    AccountsHandler.setLevel(skill, player, level);
+                    //AccountsHandler.setLevel(skill, player, level);
+                    try {
+
+                        ExperienceHandler.levelUp(skill, player, true, false);
+
+                    } catch (ObjectMappingException e) {
+
+                        e.printStackTrace();
+
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+
+                    }
                     ConfigManager.savePlayer(player.getUniqueId());
                     sender.sendMessage(Text.of(TextColors.GREEN, "Successfully leveled up " + player.getName() + "'s level in " + skill + " to " + level + "."));
 

@@ -6,6 +6,7 @@ import com.lypaka.pixelskills.Config.Getters.EXPGetters;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Utils.ExperienceHandler;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Transaction;
 import org.spongepowered.api.entity.living.player.Player;
@@ -27,6 +28,8 @@ public class Harvester {
 
     @Listener
     public void onMine (ChangeBlockEvent.Break event, @Root Player player) throws IOException, ObjectMappingException {
+
+        if (!Sponge.getServer().getPlayer(player.getName()).isPresent()) return;
 
         if (player.gameMode().get().equals(GameModes.CREATIVE)) return;
 

@@ -1,6 +1,7 @@
 package com.lypaka.pixelskills.Utils.SkillCandy;
 
 import com.google.common.collect.Lists;
+import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Config.Getters.GeneralGetters;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.ExperienceHandler;
@@ -36,7 +37,8 @@ public class CandyItem {
         int conf = GeneralGetters.getConfigFromSkill(skill);
         if (AccountsHandler.getLevel(skill, player) < GeneralGetters.getMaxLevel(conf)) {
 
-            ExperienceHandler.levelUp(skill, player, true);
+            ExperienceHandler.levelUp(skill, player, true, true);
+            ConfigManager.savePlayer(player.getUniqueId());
 
         }
 

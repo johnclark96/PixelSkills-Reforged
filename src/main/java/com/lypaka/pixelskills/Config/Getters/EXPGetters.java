@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.lypaka.pixelskills.Config.ConfigManager;
 import com.lypaka.pixelskills.Utils.AccountsHandler;
 import com.lypaka.pixelskills.Utils.ExperienceHandler;
+import com.lypaka.pixelskills.Utils.ModifierHandler;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import org.spongepowered.api.entity.living.player.Player;
 
@@ -30,9 +31,9 @@ public class EXPGetters {
 
     }
 
-    public static String getModifier (int folder) {
+    public static double getModifier (int folder, Player player) {
 
-        return ConfigManager.getConfigNode(folder, 1, "Calculation", "Increase-Increment", "Modifier").getString();
+        return ModifierHandler.eval(ConfigManager.getConfigNode(folder, 1, "Calculation", "Increase-Increment", "Modifier").getString().replace("%player-level%", String.valueOf(AccountsHandler.getLevel(GeneralGetters.getSkillFromConfigNumber(folder), player))));
 
     }
 
@@ -82,8 +83,8 @@ public class EXPGetters {
     public static void setEXPToNextLevel (int folder, Player player) throws ObjectMappingException {
 
         String expMode = getEXPMode(folder);
+        String skill = GeneralGetters.getSkillFromConfigNumber(folder);
         int lvl = AccountsHandler.getLevel(GeneralGetters.getSkillFromConfigNumber(folder), player);
-        double base = getBaseEXP(folder);
         int amount = getIncrementAmount(folder);
         double newEXP = 0;
         Map<String, Double> map = getEXPMap(folder);
@@ -92,42 +93,35 @@ public class EXPGetters {
 
             case "calculated":
 
-                String[] modifier = getModifier(folder).split(" ");
-                int mod = 0;
+                double modifier = getModifier(folder, player);
 
-                if (modifier[1].equalsIgnoreCase("%player-level%")) {
-
-                    mod = lvl;
-
-                } else {
-
-                    mod = Integer.parseInt(modifier[1]);
-
-                }
-
-                String function = modifier[0];
+                String function = ConfigManager.getConfigNode(folder, 1, "Calculation", "Increase-Increment", "Function").getString().toLowerCase();
 
                 switch (function) {
 
                     case "add":
-                        newEXP = amount + mod;
+                        newEXP = amount + modifier;
                         break;
 
                     case "multiply":
-                        newEXP = amount * mod;
+                        newEXP = amount * modifier;
                         break;
 
                 }
 
-                AccountsHandler.setEXP(GeneralGetters.getSkillFromConfigNumber(folder), newEXP, player);
+                //AccountsHandler.setEXP(GeneralGetters.getSkillFromConfigNumber(folder), newEXP, player);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP-To-Next-Level").setValue(newEXP);
                 break;
 
             case "fixed":
 
-                AccountsHandler.setEXP(GeneralGetters.getSkillFromConfigNumber(folder), map.get("Level-" + lvl), player);
+                //AccountsHandler.setEXP(GeneralGetters.getSkillFromConfigNumber(folder), map.get("Level-" + lvl), player);
+                ConfigManager.getPlayerConfigNode(player.getUniqueId(), "Account", skill, "EXP-To-Next-Level").setValue(map.get("Level-" + lvl));
                 break;
 
         }
+
+        //ConfigManager.savePlayer(player.getUniqueId());
 
     }
 

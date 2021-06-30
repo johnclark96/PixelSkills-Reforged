@@ -210,6 +210,8 @@ public class Artificer {
 
             if (GeneralGetters.isTaskEnabled(1, "Using-Pixelmon-Anvil")) {
 
+                if (!Sponge.getServer().getPlayer(event.player.getName()).isPresent()) return;
+
                 Player player = (Player) event.player;
 
                 if (GeneralGetters.getSkillPerm(1).equals("none") || player.hasPermission(GeneralGetters.getSkillPerm(1))) {
@@ -262,6 +264,8 @@ public class Artificer {
 
     @Listener
     public void onCraft (CraftItemEvent.Craft event, @Root Player player) throws ObjectMappingException {
+
+        if (!Sponge.getServer().getPlayer(player.getName()).isPresent()) return;
 
         if (GeneralGetters.isSkillEnabled(1)) {
 

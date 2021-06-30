@@ -882,20 +882,30 @@ public class PerkHandler {
         String function = PerkGetters.getPerkModifiers(folder, task).get("Function");
         double result = 0;
 
-        int amount = Integer.parseInt(PerkGetters.getPerkModifiers(folder, task).get("Amount"));
+        double amount;
+        if (task.equalsIgnoreCase("Watering-Apricorns") || task.equalsIgnoreCase("Making-Eggs") || task.equalsIgnoreCase("Learning-Moves") || task.equalsIgnoreCase("")) {
+
+            amount = 0;
+
+        } else {
+
+            amount = Double.parseDouble(PerkGetters.getPerkModifiers(folder, task).get("Amount"));
+
+        }
 
         switch (function) {
 
             case "add":
+            case "+":
                 result = modifier + amount;
                 break;
 
             case "multiply":
+            case "*":
                 result = modifier * amount;
                 break;
 
         }
-
 
         switch (task) {
 
@@ -1046,7 +1056,7 @@ public class PerkHandler {
                 break;
 
             case "Evolving-Pokemon":
-                String[] statsw = PerkGetters.getPerkModifiers(9, "").get("Modify-Stats").split(", ");
+                String[] statsw = PerkGetters.getPerkModifiers(8, "").get("Modify-Stats").split(", ");
 
                 for (String stat : statsw) {
 
@@ -1056,7 +1066,7 @@ public class PerkHandler {
                 break;
 
             case "Catching-Fish":
-                String[] statsf = PerkGetters.getPerkModifiers(10, "").get("Modify-Stats").split(", ");
+                String[] statsf = PerkGetters.getPerkModifiers(9, "").get("Modify-Stats").split(", ");
 
                 for (String stat : statsf) {
 
@@ -1215,7 +1225,7 @@ public class PerkHandler {
         }
 
         player.sendMessage(FancyText.getFancyText(MessageHandlers.getPerkMessage(GeneralGetters.getConfigFromSkill(TaskGetters.getSkillFromTask(task)), task)
-                .replace("%number%", String.valueOf(result))
+                .replace("%number%", String.valueOf((int) result))
         ));
 
     }

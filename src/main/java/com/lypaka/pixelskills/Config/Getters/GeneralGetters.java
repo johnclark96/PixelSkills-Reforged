@@ -27,7 +27,15 @@ public class GeneralGetters {
 
     public static String getSkillPerm (int folder) {
 
-        return ConfigManager.getConfigNode(folder, 0, "Access-Permission").getString();
+        if (ConfigManager.getBaseNode(1, "Access-Permission").getString().equalsIgnoreCase("enabled")) {
+
+            return ConfigManager.getConfigNode(folder, 0, "Access-Permission").getString();
+
+        } else {
+
+            return "none";
+
+        }
 
     }
 

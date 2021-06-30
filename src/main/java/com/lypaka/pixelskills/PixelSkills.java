@@ -68,15 +68,15 @@ public class PixelSkills {
         // Loads the plugin's commands
         registerCommands();
 
+        // Checks for optional dependencies
         if (Sponge.getPluginManager().getPlugin("pixelboosters").isPresent()) {
 
             isPixelBoostersLoaded = true;
             logger.info("Detected PixelBoosters, integrating...");
 
         }
+
     }
-
-
 
     @Listener
     public void onReload (GameReloadEvent event) {

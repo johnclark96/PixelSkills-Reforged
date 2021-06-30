@@ -102,7 +102,9 @@ public class MessageHandlers {
 
         }
 
-        if (GeneralGetters.areMessagesEnabled(skill, "EXP")) {
+        boolean global = ConfigManager.getBaseNode(1, "EXP-Messages").getString().equalsIgnoreCase("enabled");
+
+        if (GeneralGetters.areMessagesEnabled(skill, "EXP") && global) {
 
             if (AccountsHandler.areMessagesEnabled(player, skill)) {
 
